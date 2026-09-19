@@ -150,6 +150,13 @@ body{
   margin:0;
 }
 .h1 .ln{display:block;text-wrap:balance}
+.h1 .br-m{display:none}
+@media (max-width:680px){
+  .h1{line-height:1.1;font-size:min(35.2px,calc(9.05vw - 3px))}
+  .h1 .ln{display:inline;text-wrap:initial}
+  .h1 .ln + .ln{margin-top:0}
+  .h1 .br-m{display:inline}
+}
 .h1 .ln + .ln{margin-top:0}
 
 /* oro "flow": degradado + barrido lento (receta daddyespresso) */
@@ -245,20 +252,52 @@ body{
 }
 .vsl iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
 
-/* barra de retención: tapa los controles nativos de Bunny */
+/* Escudo: se come el ratón (Bunny no pinta controles en hover) y, al pausar,
+   se convierte en nuestro propio estado de pausa, que tapa la UI del player.
+   Por eso la barra puede ser una línea fina y limpia. */
+.vsl-shield{
+  position:absolute;inset:0;z-index:7;display:none;
+  align-items:center;justify-content:center;
+  width:100%;padding:0;border:0;cursor:pointer;
+  background:rgba(4,3,2,0);
+  transition:background .28s ease;
+  -webkit-appearance:none;appearance:none;
+}
+.vsl-shield.on{display:flex}
+.vsl-shield.paused{
+  /* opaco en la franja baja para tapar la fila de controles de Bunny, que solo
+     asoma en pausa; el resto queda atenuado, no negro */
+  background:linear-gradient(to top,
+    rgba(4,3,2,.995) 0px,
+    rgba(4,3,2,.99) 62px,
+    rgba(4,3,2,.88) 88px,
+    rgba(4,3,2,.88) 100%);
+}
+.vsl-shield:focus-visible{outline:2px solid var(--gold-b);outline-offset:-6px}
+.vsl-play{
+  width:clamp(44px,9vw,62px);height:clamp(44px,9vw,62px);
+  color:var(--gold-b);opacity:0;transform:scale(.88);
+  transition:opacity .28s ease,transform .38s var(--ease);
+  filter:drop-shadow(0 4px 16px rgba(0,0,0,.6));
+}
+.vsl-shield.paused .vsl-play{opacity:1;transform:none}
+.vsl-play svg{width:100%;height:100%;display:block}
+
+/* barra de retención */
 .vsl-bar{
-  position:absolute;left:0;right:0;bottom:0;height:52px;z-index:6;pointer-events:none;
-  background:linear-gradient(to top,rgba(4,3,2,1) 0%,rgba(4,3,2,.99) 52%,rgba(4,3,2,.86) 74%,rgba(4,3,2,0) 100%);
+  position:absolute;left:0;right:0;bottom:0;height:7px;z-index:9;pointer-events:none;
+  background:rgba(8,6,2,.46);
+  box-shadow:0 -1px 0 rgba(255,255,255,.07);
 }
 .vsl-fill{
-  position:absolute;left:0;bottom:0;height:5px;width:0;
+  position:absolute;left:0;bottom:0;height:100%;width:0;
   background:linear-gradient(90deg,var(--gold-a),var(--gold-b));
-  box-shadow:0 0 12px rgba(var(--gold-rgb),.9),0 0 3px rgba(var(--gold-rgb),1);
+  box-shadow:0 0 11px rgba(var(--gold-rgb),.85),0 0 3px rgba(var(--gold-rgb),.95);
   transition:width .3s linear;
 }
-@media (max-width:560px){.vsl-bar{height:48px}.vsl-fill{height:4px}}
-@media (min-width:561px) and (max-height:830px){.vsl-wrap{max-width:min(552px,100%)}}
-@media (min-width:561px) and (max-height:745px){.vsl-wrap{max-width:min(520px,100%)}}
+@media (max-width:560px){.vsl-bar{height:6px}}
+@media (min-width:561px) and (max-height:830px){.vsl-wrap{max-width:min(516px,100%)}}
+@media (min-width:561px) and (max-height:745px){.vsl-wrap{max-width:min(466px,100%)}.h1{font-size:clamp(2.2rem,4.4vw,3.4rem)}}
 @media (min-width:1500px) and (min-height:950px){
   .hero__inner{max-width:1280px}
   .h1{font-size:4.9rem}
@@ -284,7 +323,7 @@ body{
   background:radial-gradient(ellipse at center,rgba(0,0,0,.46),rgba(0,0,0,.78));
 }
 .vsl-tap::before{
-  content:'';position:absolute;inset:clamp(10px,13%,999px) clamp(10px,9%,999px);bottom:max(56px,13%);border-radius:14px;pointer-events:none;
+  content:'';position:absolute;inset:clamp(10px,13%,999px) clamp(10px,9%,999px);border-radius:14px;pointer-events:none;
   border:1.5px solid rgba(var(--gold-rgb),.40);
   background:rgba(9,6,1,.60);
   -webkit-backdrop-filter:blur(5px) saturate(1.12);
@@ -292,7 +331,7 @@ body{
   box-shadow:inset 0 0 58px rgba(var(--gold-rgb),.11);
 }
 .vsl-tap:focus-visible{outline:2px solid var(--gold-b);outline-offset:-6px}
-.vsl-cue{position:relative;display:flex;flex-direction:column;align-items:center;gap:clamp(8px,2.4%,13px);padding:clamp(10px,4%,18px);margin-bottom:clamp(18px,6%,30px)}
+.vsl-cue{position:relative;display:flex;flex-direction:column;align-items:center;gap:clamp(8px,2.4%,13px);padding:clamp(10px,4%,18px)}
 .vsl-ico{
   width:clamp(40px,8vw,56px);height:clamp(40px,8vw,56px);
   color:var(--gold-b);
@@ -317,7 +356,22 @@ body{
 }
 
 /* ---------- CTA ---------- */
-.cta-slot{margin:clamp(1.45rem,3.6svh,2.3rem) 0 0;display:flex;justify-content:center}
+.cta-slot{margin:clamp(1.45rem,3.6svh,2.3rem) 0 0;display:flex;flex-direction:column;align-items:center;gap:clamp(.85rem,2svh,1.15rem)}
+.cta-note{
+  margin:0;
+  font-size:clamp(12px,1.08vw,13px);font-weight:700;line-height:1.55;
+  letter-spacing:.105em;text-transform:uppercase;
+  color:rgba(255,255,255,.52);
+}
+.cta-note b{font-weight:700;color:rgba(var(--gold-rgb),.92)}
+.cta-note__sub{white-space:nowrap}
+.cta-note__dot{
+  display:inline-block;vertical-align:.1em;margin-right:.6em;
+  width:.5em;height:.5em;background:var(--gold-b);
+  box-shadow:0 0 9px rgba(var(--gold-rgb),.9);
+  animation:blip 2.8s steps(1,end) infinite;
+}
+@media (max-width:620px){.cta-note__sub{display:block;margin-top:.15em;white-space:normal}}
 .cta-slot.rise{animation:riseCta 1.3s var(--ease) both}
 @keyframes riseCta{
   0%  {opacity:0;transform:translate3d(0,30px,0) scale(.972);filter:blur(11px)}
@@ -375,7 +429,7 @@ body{
 @media (prefers-reduced-motion:reduce){
   .rise,.cta-slot.rise{animation:none;opacity:1;filter:none;transform:none}
   .gh{animation:none}
-  .flow,.eyebrow__px,.vsl-ico,.vsl-ico .wv1,.vsl-ico .wv2{animation:none}
+  .flow,.eyebrow__px,.cta-note__dot,.vsl-ico,.vsl-ico .wv1,.vsl-ico .wv2{animation:none}
   .flow{background-position:-340px center,0 0}
   .cta,.cta__badge{transition:none}
 }
@@ -401,8 +455,8 @@ body{
   </p>
 
   <h1 class="h1">
-    <span class="ln rise d2">Añade de <span class="flow">10.000€</span> a <span class="flow flow--2">50.000€</span> a tu negocio</span>
-    <span class="ln rise d3">con 3 sistemas <span class="gh"><span class="gh__top" aria-hidden="true"></span><span class="gh__label">copia y pega</span></span></span>
+    <span class="ln rise d2">Añade de <span class="flow">10.000€</span> a <span class="flow flow--2">50.000€</span><br class="br-m"> a tu negocio</span>
+    <span class="ln rise d3">con 3 sistemas<br class="br-m"> <span class="gh"><span class="gh__top" aria-hidden="true"></span><span class="gh__label">copia y pega</span></span></span>
   </h1>
 
   <p class="sub rise d4">Sin depender del orgánico, sin meter equipo.</p>
@@ -444,6 +498,22 @@ body{
         </span>
       </button>
 
+      <button class="vsl-shield" id="vsl-shield" type="button" aria-label="Pausar el vídeo">
+        <span class="vsl-play" aria-hidden="true">
+          <!-- play pixel, rejilla 21x21 -->
+          <svg viewBox="0 0 21 21" shape-rendering="crispEdges" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <rect x="6" y="3" width="2" height="15"/>
+            <rect x="8" y="4" width="1" height="13"/>
+            <rect x="9" y="5" width="1" height="11"/>
+            <rect x="10" y="6" width="1" height="9"/>
+            <rect x="11" y="7" width="1" height="7"/>
+            <rect x="12" y="8" width="1" height="5"/>
+            <rect x="13" y="9" width="1" height="3"/>
+            <rect x="14" y="10" width="1" height="1"/>
+          </svg>
+        </span>
+      </button>
+
       <div class="vsl-bar" aria-hidden="true"><div class="vsl-fill" id="vsl-fill"></div></div>
     </div>
   </div>
@@ -451,7 +521,7 @@ body{
   <div class="cta-slot rise d6">
     <!-- ⚠️ CAMBIAR href por la URL real del formulario / calendario -->
     <a class="cta" href="#">
-      <span class="cta__label">Quiero los 3 sistemas</span>
+      <span class="cta__label">Entrar en lista de espera</span>
       <span class="cta__badge" aria-hidden="true">
         <!-- flecha pixel arriba-derecha, rejilla 9x9 -->
         <svg viewBox="0 0 9 9" shape-rendering="crispEdges" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -465,6 +535,10 @@ body{
         </svg>
       </span>
     </a>
+    <p class="cta-note">
+      <span class="cta-note__dot" aria-hidden="true"></span><b>Plazas terminadas ahora</b>
+      <span class="cta-note__sub">(solo trabajamos con 2 negocios al mes)</span>
+    </p>
   </div>
 
  </div>
@@ -474,8 +548,9 @@ body{
 (function(){
   var frame=document.getElementById('vsl-frame'),
       fill=document.getElementById('vsl-fill'),
-      tap=document.getElementById('vsl-tap');
-  if(!frame||!fill||!tap) return;
+      tap=document.getElementById('vsl-tap'),
+      shield=document.getElementById('vsl-shield');
+  if(!frame||!fill||!tap||!shield) return;
 
   /* curva de retención: MUY rápida al principio, luego se normaliza */
   var PTS=[[0,0],[0.012,0.22],[0.05,0.38],[0.18,0.55],[0.50,0.75],[1,1]];
@@ -489,7 +564,7 @@ body{
   }
   function setProg(f){ fill.style.width=(Math.max(0,Math.min(1,warp(f)))*100).toFixed(2)+'%'; }
 
-  var player=null, ready=false, got=false, fb=null, pending=null, engaged=false;
+  var player=null, ready=false, got=false, fb=null, pending=null, engaged=false, playing=true;
 
   function rewind(unmute){
     setProg(0);
@@ -517,7 +592,9 @@ body{
         got=true; if(fb){clearInterval(fb);fb=null;}
         setProg(e.seconds/e.duration);
       });
-      player.on('ended',function(){setProg(1);});
+      player.on('ended',function(){setProg(1);playing=false;paintState();});
+      player.on('play',function(){playing=true;paintState();});
+      player.on('pause',function(){playing=false;paintState();});
       if(pending){ var u=pending.unmute; pending=null; rewind(u); }
     });
   }
@@ -538,10 +615,25 @@ body{
     if(engaged) return;
     engaged=true;
     tap.style.display='none';
+    shield.classList.add('on');   // a partir de aquí el escudo se come el ratón: Bunny no pinta controles
     var cta=document.querySelector('.cta');
     if(cta&&document.activeElement===tap) cta.focus({preventScroll:true});
     rewind(true);
     startFallback();
+  });
+
+  // el escudo es el único control: alterna pausa y reanudación
+  function paintState(){
+    shield.classList.toggle('paused',!playing);
+    shield.setAttribute('aria-label', playing ? 'Pausar el vídeo' : 'Reanudar el vídeo');
+  }
+  shield.addEventListener('click',function(){
+    if(!player||!ready) return;
+    try{
+      if(playing){ player.pause(); playing=false; }
+      else { player.play(); playing=true; }
+    }catch(e){}
+    paintState();
   });
 })();
 </script>

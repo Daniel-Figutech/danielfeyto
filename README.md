@@ -21,12 +21,21 @@ Para cambiar el vídeo basta con sustituir la librería y el GUID dentro de la U
 `autoplay=true&muted=true`: los navegadores bloquean el autoplay con sonido, y por eso existe la
 capa de "toca para activar el sonido", que además rebobina a 0 para no perder los primeros segundos.
 
-## Un ajuste recomendado en Bunny
+## Cómo se controla el vídeo
 
-El player de Bunny pinta sus propios controles al pausar o al pasar el ratón, y compiten con la barra
-de retención. Ahora mismo los tapa una franja degradada de 52 px al pie del vídeo, verificada en
-navegador. La solución limpia es apagarlos en origen: **Bunny → Stream → librería 583428 → Player →
-quitar "Show Controls"**. Hecho eso, se puede bajar `.vsl-bar` a 10-12 px y el vídeo gana alto útil.
+El player de Bunny pinta sus propios controles al pasar el ratón y al pausar, y competían con la
+barra de retención. En vez de taparlos con una franja oscura, que se veía mal, el vídeo lleva un
+**escudo transparente** por encima del iframe desde el primer toque:
+
+- Se come los eventos de ratón, así que Bunny nunca llega a mostrar sus controles en hover.
+- Un clic pausa o reanuda por la API de Player.js.
+- Al pausar, el escudo se convierte en **nuestro propio estado de pausa**: atenúa el vídeo, es opaco
+  en los 62 px de abajo (donde vive la fila de controles de Bunny) y muestra un botón de play pixel.
+
+Resultado: la barra de retención es una línea fina de 7 px y no hay ningún degradado negro. El único
+efecto secundario es que no hay pantalla completa ni barra de avance nativas, que en una VSL es lo
+que se quiere. Si algún día los hicieran falta, se apagan los controles en **Bunny → Stream →
+librería 583428 → Player → "Show Controls"** y se puede retirar el escudo.
 
 ## Decisiones de diseño
 
@@ -60,6 +69,12 @@ Hay que volver a generarla cada vez que cambie el titular.
 
 ## Comprobado en navegador real
 
-Encaja sin scroll a 1920×1080, 1440×900, 1366×768, 1280×720, 1024×640, 768×1024, 430×932, 390×844 y
-320×700, sin desbordamiento horizontal en ninguno. Contraste mínimo 6,9:1. Autoplay silencioso, tap
-que rebobina a 0 y activa el sonido, y clics posteriores que ya no rebobinan.
+Encaja sin scroll a 1920×1080, 1440×900, 1366×768, 1280×800, 1280×720, 1024×640, 768×1024, 430×932,
+390×844, 360×780 y 320×700, sin desbordamiento horizontal en ninguno. Contraste mínimo 6,9:1.
+
+El titular ocupa **exactamente 3 líneas en móvil** de 320 a 430 px, con los saltos forzados en el
+marcado (`<br class="br-m">`) y el cuerpo escalado para que la línea más larga siempre quepa. En
+escritorio son 2 líneas.
+
+Verificado también: autoplay silencioso, el toque rebobina a 0 y activa el sonido, el escudo pausa y
+reanuda, y los controles de Bunny no aparecen ni en hover ni en pausa.
