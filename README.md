@@ -29,8 +29,9 @@ barra de retención. En vez de taparlos con una franja oscura, que se veía mal,
 
 - Se come los eventos de ratón, así que Bunny nunca llega a mostrar sus controles en hover.
 - Un clic pausa o reanuda por la API de Player.js.
-- Al pausar, el escudo se convierte en **nuestro propio estado de pausa**: atenúa el vídeo, es opaco
-  en los 62 px de abajo (donde vive la fila de controles de Bunny) y muestra un botón de play pixel.
+- Al pausar, el escudo se convierte en **nuestro propio estado de pausa**: un panel plano y opaco
+  (`#0A0805`, sin degradado) con un play pixel dentro de un círculo con filo dorado. Al ser opaco
+  entero, no asoma nada del player ni queda ninguna banda.
 
 Resultado: la barra de retención es una línea fina de 7 px y no hay ningún degradado negro. El único
 efecto secundario es que no hay pantalla completa ni barra de avance nativas, que en una VSL es lo
@@ -51,8 +52,10 @@ librería 583428 → Player → "Show Controls"** y se puede retirar el escudo.
   con tinta oscura, que es lo que pide esa misma skill para superficies claras.
 - **Barra de retención** del vídeo: sigue el tiempo real pero deforma cómo se muestra, con una curva
   cóncava. A los 5 s ya va por el 18%. Los puntos de control están en `PTS` dentro del script.
-- **Iconos**: dibujados sobre rejilla de píxeles (9×9 la flecha, 21×21 el altavoz), al estilo del set
-  Pixel de Streamline (CC BY 4.0) que sirvió de referencia.
+- **Iconos**: dibujados sobre rejilla de píxeles (16×16 la flecha del botón, 21×21 el altavoz y el
+  play), al estilo del set Pixel de Streamline (CC BY 4.0) que sirvió de referencia. La flecha es un
+  corchete en la esquina superior derecha más un asta diagonal: se probaron seis construcciones y las
+  de cabeza maciza leían como un pico y las de brazo largo como un «7».
 - **Entrada**: un solo primitivo, `slide in up` con desenfoque que se resuelve a mitad del recorrido
   (no al final, que se vería como un enfoque tardío). Escalonado en seis tiempos; el botón remata con
   una curva propia, más larga, para que su halo florezca al aterrizar.
