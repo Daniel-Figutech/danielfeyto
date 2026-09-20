@@ -105,12 +105,29 @@ derecha. Se regenera desde `_dev/og.html`, que primero captura la página del se
 
 Hay que volver a generarla cada vez que cambie el titular o el diseño. Necesita el servidor local levantado.
 
-## Un detalle que no se ve en el código
+## Dos detalles que no se ven en el código
 
-Las animaciones de entrada terminan en `filter:none`, no en `blur(0)`, y al acabar se retira la
-clase `rise`. Un filtro distinto de `none`, aunque sea de cero, deja una región de filtro que
-**recorta lo que pintan sus hijos**: el bloom del recuadro dorado salía cortado en un rectángulo,
-y se veía sobre todo en móvil.
+El bloom del recuadro dorado salía recortado en un rectángulo, y tenía **dos causas independientes**:
+
+1. Las animaciones de entrada terminaban en `filter: blur(0)`. Un filtro distinto de `none`, aunque
+   sea de cero, deja una región de filtro que recorta lo que pintan sus hijos. Ahora terminan en
+   `filter: none` y al acabar se retira la clase `rise`.
+2. `.gh` llevaba `overflow:hidden` y `filter` a la vez. **Eso solo falla en WebKit**, que es el motor
+   de Safari y el de la webview de Instagram: en Chrome se veía perfecto y en un iPhone real salía el
+   rectángulo. Ahora son dos elementos, `.gh` con el bloom y `.gh__box` con el recorte y la superficie.
+
+Moraleja: los glows hay que verificarlos también con WebKit, no solo con la vista de móvil del
+escritorio.
+
+## Cumplimiento
+
+El pie lleva el aviso de independencia respecto a Meta y Google y el de resultados no garantizados, y
+enlaza las cuatro páginas legales (`/privacidad`, `/terminos`, `/cookies`, `/aviso-legal`). La cifra
+del titular está **fuera del `<h1>`**: se ve igual, pero la etiqueta va en la línea del mecanismo.
+
+Las páginas legales identifican al responsable por `hola@danielfeyto.com`, sin razón social. **Ese
+buzón tiene que existir y contestar**, y el RGPD pide identificar al responsable del tratamiento, así
+que conviene añadir la entidad en cuanto esté.
 
 ## Comprobado en navegador real
 

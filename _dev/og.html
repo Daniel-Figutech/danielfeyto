@@ -86,7 +86,7 @@ body{
   min-height:100svh;
   padding:calc(clamp(2rem,5svh,3.6rem) + env(safe-area-inset-top,0px))
           calc(clamp(1rem,5vw,2rem) + env(safe-area-inset-right,0px))
-          calc(clamp(2rem,5svh,3rem) + 46px + env(safe-area-inset-bottom,0px))
+          calc(clamp(2rem,5svh,3rem) + env(safe-area-inset-bottom,0px))
           calc(clamp(1rem,5vw,2rem) + env(safe-area-inset-left,0px));
   text-align:center;
 }
@@ -133,6 +133,7 @@ body{
   margin:0;
 }
 .h1 .ln{display:block;text-wrap:balance}
+.h1 h1.ln{margin:0;font:inherit;letter-spacing:inherit}
 .h1 .br-m{display:none}
 @media (max-width:680px){
   .h1{line-height:1.1;font-size:min(35.2px,calc(9.05vw - 3px))}
@@ -162,11 +163,22 @@ body{
 }
 
 /* ---------- glow highlight (skill build-glow-text-highlight, hue oro) ---------- */
+/* DOS elementos, no uno. WebKit recorta el drop-shadow cuando el MISMO elemento
+   lleva overflow:hidden, y el bloom sale como un rectángulo con el canto duro.
+   Fuera va solo el bloom; dentro, el recorte y todas las capas de la superficie. */
 .gh{
-  position:relative;isolation:isolate;
-  display:inline-flex;align-items:center;
+  display:inline-flex;
   margin:0 -.02em;
   margin-block:-.0723em;
+  line-height:1;
+  filter:
+    drop-shadow(0 0 20px rgba(var(--gold-box-rgb),.40))
+    drop-shadow(0 0 40px rgba(var(--gold-box-rgb),.15));
+  transform:rotate(-.55deg) translateZ(0);
+}
+.gh__box{
+  position:relative;isolation:isolate;
+  display:inline-flex;align-items:center;
   padding:.0275em .205em .117em;
   line-height:1;
   overflow:hidden;border:0;border-radius:.145em;
@@ -177,17 +189,13 @@ body{
     0 -2px 0 rgba(118,66,0,.30) inset,
     0 -5px 8px -5px rgba(88,48,0,.28) inset,
     0 3px 7px rgba(0,0,0,.62);
-  filter:
-    drop-shadow(0 0 20px rgba(var(--gold-box-rgb),.40))
-    drop-shadow(0 0 40px rgba(var(--gold-box-rgb),.15));
-  transform:rotate(-.55deg) translateZ(0);
 }
-.gh::before,.gh::after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;border-radius:inherit}
-.gh::before{
+.gh__box::before,.gh__box::after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;border-radius:inherit}
+.gh__box::before{
   background:linear-gradient(180deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,.075) 31%,transparent 62%,rgba(96,52,0,.16) 100%);
   opacity:.5;
 }
-.gh::after{
+.gh__box::after{
   background:
     radial-gradient(120% 21% at 50% 0%,rgba(255,255,255,.42),rgba(255,255,255,.08) 52%,transparent 76%),
     linear-gradient(180deg,rgba(255,255,255,.105) 0 46%,transparent 54% 100%);
@@ -205,7 +213,7 @@ body{
   from{filter:drop-shadow(0 0 0 rgba(var(--gold-box-rgb),0)) drop-shadow(0 0 0 rgba(var(--gold-box-rgb),0))}
   to  {filter:drop-shadow(0 0 20px rgba(var(--gold-box-rgb),.40)) drop-shadow(0 0 40px rgba(var(--gold-box-rgb),.15))}
 }
-@media (max-width:520px){.gh{border-radius:.18em}}
+@media (max-width:520px){.gh__box{border-radius:.18em}}
 
 /* ---------- subtítulo ---------- */
 .sub{
@@ -334,7 +342,6 @@ body{
   .h1{font-size:clamp(1.8rem,3vw,2.3rem)}
   .sub{font-size:1rem;margin-top:.7rem}
   .cta-slot{margin-top:.9rem}
-  .footer{width:48px;bottom:9px}
 }
 @media (min-width:1500px) and (min-height:1040px){
   .hero__inner{max-width:1280px}
@@ -404,15 +411,33 @@ body{
 }
 .cta-note b{font-weight:700;color:rgba(var(--gold-rgb),.92)}
 .cta-note__sub{white-space:nowrap}
-.footer{
-  position:absolute;left:50%;bottom:clamp(16px,2.6svh,30px);
-  transform:translateX(-50%);z-index:3;
-  display:flex;align-items:center;justify-content:center;
-  width:clamp(58px,6vw,72px);
-  opacity:.4;transition:opacity .35s var(--ease);
+.pie{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;
+  gap:clamp(.9rem,2.4vw,1.2rem);
+  padding:clamp(2rem,5vw,2.8rem) clamp(1.15rem,5vw,2rem)
+          calc(clamp(1.8rem,4vw,2.4rem) + env(safe-area-inset-bottom,0px));
+  text-align:center;
+  border-top:1px solid rgba(255,255,255,.06);
 }
-.footer:hover{opacity:.72}
-.footer img{width:100%;height:auto;display:block}
+.pie__marca{display:block;width:clamp(52px,5.4vw,64px);opacity:.4;transition:opacity .35s var(--ease)}
+.pie__marca:hover{opacity:.75}
+.pie__marca img{width:100%;height:auto;display:block}
+.pie__aviso{
+  margin:0;max-width:64ch;
+  font-size:clamp(11.5px,1.05vw,12.5px);line-height:1.62;
+  color:rgba(255,255,255,.40);
+}
+.pie__aviso strong{color:rgba(255,255,255,.58);font-weight:700}
+.pie__links{display:flex;flex-wrap:wrap;justify-content:center;gap:.45em 1.15em}
+.pie__links a{
+  font-size:clamp(11.5px,1.05vw,12.5px);font-weight:700;
+  letter-spacing:.11em;text-transform:uppercase;
+  color:rgba(255,255,255,.46);text-decoration:none;
+  transition:color .3s var(--ease);
+}
+.pie__links a:hover{color:rgba(var(--gold-rgb),.92)}
+.pie a:focus-visible{outline:2px solid var(--gold-b);outline-offset:3px;border-radius:3px}
 .cta-note__dot{
   display:inline-block;vertical-align:.1em;margin-right:.6em;
   width:.5em;height:.5em;background:var(--gold-b);
@@ -469,10 +494,6 @@ body{
 
 
 /* ---------- reduced motion ---------- */
-/* en movil apaisado el hero ya no cabe: el logo pasa a ir en el flujo, al final */
-@media (max-width:900px) and (max-height:660px) and (orientation:landscape){
-  .footer{position:static;left:auto;bottom:auto;transform:none;margin:1.3rem auto 0;width:48px}
-}
 @media (forced-colors:active){
   .cta{border:2px solid ButtonBorder;background:ButtonFace;color:ButtonText;forced-color-adjust:none}
   .cta__badge{border:1px solid ButtonBorder}
@@ -516,7 +537,7 @@ body{width:1200px;height:630px;overflow:hidden;position:relative}
     <h1 class="ogh1">
       <span class="ln">Añade de <span class="flow">10.000€</span> a <span class="flow flow--2">50.000€</span></span>
       <span class="ln">a tu negocio con 3 sistemas</span>
-      <span class="ln"><span class="gh"><span class="gh__top"></span><span class="gh__label">copia y pega</span></span></span>
+      <span class="ln"><span class="gh"><span class="gh__box"><span class="gh__top"></span><span class="gh__label">copia y pega</span></span></span></span>
     </h1>
     <p class="ogsub">Sin depender del orgánico, sin meter equipo.</p>
   </div>
