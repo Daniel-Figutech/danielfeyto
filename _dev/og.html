@@ -261,7 +261,13 @@ body{
   border-radius:17px 17px 0 0;overflow:hidden;background:#000;
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.05);
 }
-.vsl iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+/* Sobrebarrido mínimo: la caja del vídeo cae en alturas fraccionarias y el
+   borde superior dejaba un filo oscuro de ~1,3 px. Escalar un 1,6% lo empuja
+   fuera del recorte sin que se note el recorte lateral (~4 px por lado). */
+.vsl iframe{
+  position:absolute;inset:0;width:100%;height:100%;border:0;display:block;
+  transform:scale(1.016);transform-origin:center center;
+}
 
 /* Escudo: se come el ratón (Bunny no pinta controles en hover) y, al pausar,
    se convierte en nuestro propio estado de pausa, que tapa la UI del player.

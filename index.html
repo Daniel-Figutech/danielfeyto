@@ -286,7 +286,13 @@ body{
   border-radius:17px 17px 0 0;overflow:hidden;background:#000;
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.05);
 }
-.vsl iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+/* Sobrebarrido mínimo: la caja del vídeo cae en alturas fraccionarias y el
+   borde superior dejaba un filo oscuro de ~1,3 px. Escalar un 1,6% lo empuja
+   fuera del recorte sin que se note el recorte lateral (~4 px por lado). */
+.vsl iframe{
+  position:absolute;inset:0;width:100%;height:100%;border:0;display:block;
+  transform:scale(1.016);transform-origin:center center;
+}
 
 /* Escudo: se come el ratón (Bunny no pinta controles en hover) y, al pausar,
    se convierte en nuestro propio estado de pausa, que tapa la UI del player.
@@ -614,6 +620,34 @@ body{
 </main>
 
 <script>
+/* El vídeo caía en alturas y posiciones fraccionarias, así que el navegador
+   componía la primera y la última fila mezcladas con el fondo y se veía un filo
+   fino arriba y abajo. Dos pasos: altura a entero y borde superior alineado a la
+   rejilla de píxeles de la pantalla. El aspect-ratio del CSS es el respaldo. */
+(function(){
+  var caja=document.querySelector('.vsl'),
+      escenario=document.querySelector('.vsl-stage'),
+      marco=document.querySelector('.vsl-wrap');
+  if(!caja||!escenario||!marco) return;
+  var AR=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--vsl-ar'))||1.9112;
+  var ajustar=function(){
+    var ancho=escenario.getBoundingClientRect().width-12;   /* 6 px de relleno por lado */
+    if(ancho<=0) return;
+    caja.style.height=Math.round(ancho/AR)+'px';
+    marco.style.transform='none';
+    var dpr=window.devicePixelRatio||1;
+    var resto=(caja.getBoundingClientRect().top*dpr)%1;
+    if(resto>0.002) marco.style.transform='translateY('+(-resto/dpr).toFixed(4)+'px)';
+  };
+  if(window.ResizeObserver) new ResizeObserver(ajustar).observe(escenario);
+  window.addEventListener('resize',ajustar);
+  document.addEventListener('animationend',function(e){
+    if(e.animationName==='rise') ajustar();
+  },true);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(ajustar);
+  ajustar();
+})();
+
 (function(){
   var frame=document.getElementById('vsl-frame'),
       fill=document.getElementById('vsl-fill'),

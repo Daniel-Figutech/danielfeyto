@@ -39,9 +39,19 @@ El vídeo **no es 16:9**. Medido en navegador con dos cajas distintas (1200×900
 1400×600 → 1,91167), su proporción real es **1,9112**, y está en `--vsl-ar`. Con un contenedor 16:9
 Bunny dejaba unos 10 px de banda negra abajo. **Si se cambia la VSL hay que volver a medirla.**
 
-Verificado en 24 tamaños de pantalla: cero bandas negras dentro del vídeo, el bisel deja **6 px
-idénticos** por los cuatro lados (radio exterior 23, relleno 6, radio interior 17) y la barra de
-retención va **debajo del vídeo, nunca encima**, para no tapar la cámara de la esquina inferior.
+Además hacían falta tres cosas para que el borde quedara limpio de verdad:
+
+1. **Sobrebarrido del iframe** (`scale(1.016)`). La grabación trae un filo gris de ~1 px en su borde
+   superior; el escalado lo empuja fuera del recorte y se pierden ~4 px por lado, que no se notan.
+2. **Altura a entero.** La caja caía en alturas fraccionarias (177,38 px) y el navegador componía la
+   última fila mezclada con el fondo. Un `ResizeObserver` la redondea en cada cambio de tamaño.
+3. **Borde superior alineado a la rejilla de píxeles** de la pantalla, con un `translateY` de menos
+   de un píxel sobre el marco.
+
+Verificado en 24 tamaños de pantalla y, para los bordes, en 18 combinaciones de tamaño y densidad
+(×2 y ×3): cero bandas negras y cero filos. El bisel deja **6 px idénticos** por los cuatro lados
+(radio exterior 23, relleno 6, radio interior 17) y la barra de retención va **debajo del vídeo,
+nunca encima**, para no tapar la cámara de la esquina inferior.
 
 ### Backlight
 
