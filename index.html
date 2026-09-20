@@ -52,6 +52,10 @@
   --mute:rgba(255,255,255,.56);
   --mute-soft:rgba(255,255,255,.40);
   --ease:cubic-bezier(.16,1,.3,1);
+  /* Proporción REAL del vídeo de Bunny, medida en navegador (dos cajas distintas:
+     1200x900 -> 1.91083 y 1400x600 -> 1.91167). Si se cambia la VSL hay que volver
+     a medirla, o el player deja bandas negras arriba y abajo. */
+  --vsl-ar:1.9112;
 }
 
 *,*::before,*::after{box-sizing:border-box}
@@ -236,21 +240,49 @@ body{
 }
 
 /* ---------- vídeo ---------- */
-.vsl-wrap{
-  width:100%;max-width:min(624px,100%);
+/* escenario del vídeo: el marco va encima, la luz de fondo detrás */
+.vsl-stage{
+  position:relative;width:100%;max-width:min(660px,100%);
   margin:clamp(1.5rem,3.9svh,2.6rem) 0 0;
+}
+.vsl-wrap{
+  position:relative;z-index:2;
+  width:100%;
   padding:6px;border-radius:23px;
   line-height:0;
   background:linear-gradient(180deg,rgba(255,255,255,.085),rgba(255,255,255,.018) 40%,rgba(255,255,255,.045));
   box-shadow:
     0 0 0 1px rgba(255,255,255,.045),
-    0 30px 80px -28px rgba(0,0,0,.95),
-    0 0 70px -20px rgba(var(--gold-rgb),.22);
+    0 30px 80px -28px rgba(0,0,0,.95);
 }
-/* El bloque interior = vídeo (16:9 exacto) + barra debajo. Radio exterior 23 y
-   relleno 6 ⇒ el radio interior tiene que ser 17 para encajar al milímetro. */
+
+/* Backlight: tres capas con caídas distintas. Halo amplio detrás, filo que
+   ciñe el marco, y derrame hacia abajo, como si la pantalla iluminara el fondo. */
+.vsl-backlight{position:absolute;z-index:0;inset:0;pointer-events:none;animation:blrespira 9s ease-in-out infinite}
+.vsl-backlight i{position:absolute;display:block;border-radius:44px}
+/* 1 · halo amplio, la luz que baña el fondo */
+.vsl-backlight i:nth-child(1){
+  inset:-13% -10% -21%;
+  background:radial-gradient(66% 58% at 50% 48%,rgba(var(--gold-rgb),.30),rgba(201,149,58,.11) 50%,transparent 78%);
+  filter:blur(58px);
+}
+/* 2 · filo que ciñe el marco, el que da la sensación de pantalla encendida */
+.vsl-backlight i:nth-child(2){
+  inset:-2.5% -2% -6%;border-radius:30px;
+  background:linear-gradient(180deg,rgba(255,226,138,.30),rgba(201,149,58,.17) 52%,rgba(196,147,41,.06));
+  filter:blur(20px);
+}
+/* 3 · derrame hacia abajo, como si iluminara la superficie */
+.vsl-backlight i:nth-child(3){
+  left:11%;right:11%;bottom:-14%;height:24%;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(var(--gold-rgb),.22),transparent 76%);
+  filter:blur(28px);
+}
+@keyframes blrespira{0%,100%{opacity:.92}50%{opacity:1}}
+/* El bloque interior = vídeo (a su proporción exacta, sin bandas) + barra debajo.
+   Radio exterior 23 y relleno 6 ⇒ el radio interior tiene que ser 17 para encajar. */
 .vsl{
-  position:relative;width:100%;aspect-ratio:16/9;
+  position:relative;width:100%;aspect-ratio:var(--vsl-ar);
   border-radius:17px 17px 0 0;overflow:hidden;background:#000;
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.05);
 }
@@ -268,13 +300,10 @@ body{
   -webkit-appearance:none;appearance:none;
 }
 .vsl-shield.on{display:flex}
-/* En pausa NO se apaga el vídeo: se congela y se esmerila. El desenfoque vuelve
-   ilegibles los controles que Bunny saca al pausar, sin cubrirlo de negro. */
-.vsl-shield.paused{
-  background:rgba(8,6,3,.50);
-  -webkit-backdrop-filter:blur(26px) saturate(.8);
-          backdrop-filter:blur(26px) saturate(.8);
-}
+/* En pausa se ve el fotograma tal cual: ni negro ni desenfoque. Solo un velo
+   mínimo para que el play tenga contraste. Como el escudo se come el ratón, el
+   player no llega a sacar sus controles. */
+.vsl-shield.paused{background:rgba(6,5,3,.26)}
 .vsl-shield:focus-visible{outline:2px solid var(--gold-b);outline-offset:-6px}
 .vsl-play{
   display:grid;place-items:center;
@@ -303,21 +332,21 @@ body{
 @media (max-width:560px){.vsl-bar{height:6px}}
 /* pantallas anchas pero bajas: se comprime por ALTURA, no solo por ancho */
 @media (min-width:561px) and (max-height:1010px){
-  .vsl-wrap{max-width:min(566px,100%)}
+  .vsl-stage{max-width:min(596px,100%)}
 }
 @media (min-width:561px) and (max-height:830px){
-  .vsl-wrap{max-width:min(462px,100%);margin-top:clamp(.9rem,2.2svh,1.5rem)}
+  .vsl-stage{max-width:min(490px,100%);margin-top:clamp(.9rem,2.2svh,1.5rem)}
   .h1{font-size:clamp(2.2rem,4.1vw,3.2rem)}
   .eyebrow{margin-bottom:.85rem}
   .sub{margin-top:.85rem}
   .cta-slot{margin-top:1.05rem}
 }
 @media (min-width:561px) and (max-height:700px){
-  .vsl-wrap{max-width:min(424px,100%)}
+  .vsl-stage{max-width:min(448px,100%)}
   .h1{font-size:clamp(2rem,3.7vw,2.75rem)}
 }
 @media (min-width:561px) and (max-height:660px){
-  .vsl-wrap{max-width:min(344px,100%);margin-top:.85rem}
+  .vsl-stage{max-width:min(364px,100%);margin-top:.85rem}
   .h1{font-size:clamp(1.8rem,3vw,2.3rem)}
   .sub{font-size:1rem;margin-top:.7rem}
   .cta-slot{margin-top:.9rem}
@@ -328,13 +357,13 @@ body{
   .h1{font-size:4.9rem}
   .sub{font-size:1.3rem}
   .eyebrow{font-size:15px}
-  .vsl-wrap{max-width:min(700px,100%)}
+  .vsl-stage{max-width:min(740px,100%)}
 }
 @media (max-width:900px) and (max-height:660px) and (orientation:landscape){
   .hero{padding-top:1.6rem;padding-bottom:1.6rem}
   .h1{font-size:clamp(1.55rem,3.2vw,2.5rem)}
   .sub{font-size:1rem;margin-top:.8rem}
-  .vsl-wrap{max-width:min(460px,100%);margin-top:1.1rem}
+  .vsl-stage{max-width:min(486px,100%);margin-top:1.1rem}
   .cta-slot{margin-top:1.1rem}
   .hero{padding-bottom:1.6rem}
 }
@@ -468,7 +497,7 @@ body{
 @media (prefers-reduced-motion:reduce){
   .rise,.cta-slot.rise{animation:none;opacity:1;filter:none;transform:none}
   .gh{animation:none}
-  .flow,.eyebrow__px,.cta-note__dot,.vsl-ico,.vsl-ico .wv1,.vsl-ico .wv2{animation:none}
+  .flow,.eyebrow__px,.cta-note__dot,.vsl-backlight,.vsl-ico,.vsl-ico .wv1,.vsl-ico .wv2{animation:none}
   .flow{background-position:-340px center,0 0}
   .cta,.cta__badge{transition:none}
 }
@@ -500,7 +529,9 @@ body{
 
   <p class="sub rise d4">Sin depender del orgánico, sin meter equipo.</p>
 
-  <div class="vsl-wrap rise d5">
+  <div class="vsl-stage rise d5">
+   <div class="vsl-backlight" aria-hidden="true"><i></i><i></i><i></i></div>
+   <div class="vsl-wrap">
     <div class="vsl">
       <iframe id="vsl-frame"
         src="https://player.mediadelivery.net/embed/583428/5c6e7217-086b-44c4-a8d2-9f5132fced85?autoplay=true&loop=false&muted=true&preload=true&responsive=true"
@@ -555,6 +586,7 @@ body{
 
     </div>
     <div class="vsl-bar" aria-hidden="true"><div class="vsl-fill" id="vsl-fill"></div></div>
+   </div>
   </div>
 
   <div class="cta-slot rise d6">

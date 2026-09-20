@@ -29,16 +29,25 @@ barra de retención. En vez de taparlos con una franja oscura, que se veía mal,
 
 - Se come los eventos de ratón, así que Bunny nunca llega a mostrar sus controles en hover.
 - Un clic pausa o reanuda por la API de Player.js.
-- Al pausar, el escudo se convierte en **nuestro propio estado de pausa**: no apaga el vídeo, lo
-  congela y lo esmerila (`backdrop-filter: blur(26px)`), con un play pixel dentro de un círculo con
-  filo dorado. El desenfoque vuelve ilegibles los controles que Bunny saca al pausar, sin cubrirlo
-  de negro.
+- Al pausar se ve el fotograma tal cual, sin negro y sin desenfoque: solo un velo del 26% para que
+  el play tenga contraste. Como el escudo se come el ratón, el player no llega a sacar sus controles
+  (verificado a 1 s y a 4 s de la pausa).
 
 ## Geometría del vídeo
 
-Medida y verificada en 24 tamaños de pantalla: el vídeo es **16:9 exacto** (1,7778), el bisel deja
-**6 px idénticos** por los cuatro lados (radio exterior 23, relleno 6, radio interior 17) y la barra
-de retención va **debajo del vídeo, nunca encima**, para no tapar la cámara de la esquina inferior.
+El vídeo **no es 16:9**. Medido en navegador con dos cajas distintas (1200×900 → 1,91083 y
+1400×600 → 1,91167), su proporción real es **1,9112**, y está en `--vsl-ar`. Con un contenedor 16:9
+Bunny dejaba unos 10 px de banda negra abajo. **Si se cambia la VSL hay que volver a medirla.**
+
+Verificado en 24 tamaños de pantalla: cero bandas negras dentro del vídeo, el bisel deja **6 px
+idénticos** por los cuatro lados (radio exterior 23, relleno 6, radio interior 17) y la barra de
+retención va **debajo del vídeo, nunca encima**, para no tapar la cámara de la esquina inferior.
+
+### Backlight
+
+Detrás del marco hay tres capas con caídas distintas, que juntas hacen de luz ambiente: un halo
+amplio que baña el fondo, un filo ceñido al marco que da la sensación de pantalla encendida, y un
+derrame elíptico hacia abajo. Respira un 8% cada 9 s. Se apaga con `prefers-reduced-motion`.
 
 Resultado: la barra de retención es una línea fina de 7 px y no hay ningún degradado negro. El único
 efecto secundario es que no hay pantalla completa ni barra de avance nativas, que en una VSL es lo
