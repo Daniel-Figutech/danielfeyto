@@ -94,10 +94,13 @@ body{
 
 /* ---------- entrada: slide in up + blur ---------- */
 .rise{opacity:0;animation:rise 1.05s var(--ease) both}
+/* Terminan en filter:none, NO en blur(0). Un filtro distinto de none, aunque sea
+   de cero, deja una región de filtro que RECORTA lo que pintan los hijos: el
+   bloom del recuadro dorado salía cortado en un rectángulo. */
 @keyframes rise{
   0%  {opacity:0;transform:translate3d(0,26px,0) scale(.99);filter:blur(8px)}
   48% {filter:blur(0)}
-  100%{opacity:1;transform:none;filter:blur(0)}
+  100%{opacity:1;transform:none;filter:none}
 }
 .d1{animation-delay:.05s}.d2{animation-delay:.17s}.d3{animation-delay:.30s}
 .d4{animation-delay:.44s}.d5{animation-delay:.60s}.d6{animation-delay:.78s}
@@ -421,7 +424,7 @@ body{
 @keyframes riseCta{
   0%  {opacity:0;transform:translate3d(0,30px,0) scale(.972);filter:blur(11px)}
   46% {filter:blur(0)}
-  100%{opacity:1;transform:none;filter:blur(0)}
+  100%{opacity:1;transform:none;filter:none}
 }
 .cta{
   position:relative;display:inline-flex;align-items:center;gap:.85em;

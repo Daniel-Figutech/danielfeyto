@@ -105,6 +105,13 @@ derecha. Se regenera desde `_dev/og.html`, que primero captura la página del se
 
 Hay que volver a generarla cada vez que cambie el titular o el diseño. Necesita el servidor local levantado.
 
+## Un detalle que no se ve en el código
+
+Las animaciones de entrada terminan en `filter:none`, no en `blur(0)`, y al acabar se retira la
+clase `rise`. Un filtro distinto de `none`, aunque sea de cero, deja una región de filtro que
+**recorta lo que pintan sus hijos**: el bloom del recuadro dorado salía cortado en un rectángulo,
+y se veía sobre todo en móvil.
+
 ## Comprobado en navegador real
 
 Encaja sin scroll a 1920×1080, 1440×900, 1366×768, 1280×800, 1280×720, 1024×640, 768×1024, 430×932,
