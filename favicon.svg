@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 430" role="img" aria-label="Daniel Feyto">
+  <defs>
+    <linearGradient id="p" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#F7D46C"/><stop offset=".48" stop-color="#F0C044"/><stop offset="1" stop-color="#E7AF2F"/>
+    </linearGradient>
+  </defs>
+  <rect width="430" height="430" rx="72" fill="url(#p)"/>
+  <g fill="#080705">
+    <path d="M19 120H313L408 215L313 310H208L175 276H299L360 215L299 154H52Z"/>
+    <path d="M98 199H246L278 232H131Z"/>
+  </g>
+</svg>

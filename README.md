@@ -29,9 +29,16 @@ barra de retención. En vez de taparlos con una franja oscura, que se veía mal,
 
 - Se come los eventos de ratón, así que Bunny nunca llega a mostrar sus controles en hover.
 - Un clic pausa o reanuda por la API de Player.js.
-- Al pausar, el escudo se convierte en **nuestro propio estado de pausa**: un panel plano y opaco
-  (`#0A0805`, sin degradado) con un play pixel dentro de un círculo con filo dorado. Al ser opaco
-  entero, no asoma nada del player ni queda ninguna banda.
+- Al pausar, el escudo se convierte en **nuestro propio estado de pausa**: no apaga el vídeo, lo
+  congela y lo esmerila (`backdrop-filter: blur(26px)`), con un play pixel dentro de un círculo con
+  filo dorado. El desenfoque vuelve ilegibles los controles que Bunny saca al pausar, sin cubrirlo
+  de negro.
+
+## Geometría del vídeo
+
+Medida y verificada en 24 tamaños de pantalla: el vídeo es **16:9 exacto** (1,7778), el bisel deja
+**6 px idénticos** por los cuatro lados (radio exterior 23, relleno 6, radio interior 17) y la barra
+de retención va **debajo del vídeo, nunca encima**, para no tapar la cámara de la esquina inferior.
 
 Resultado: la barra de retención es una línea fina de 7 px y no hay ningún degradado negro. El único
 efecto secundario es que no hay pantalla completa ni barra de avance nativas, que en una VSL es lo
@@ -60,15 +67,24 @@ librería 583428 → Player → "Show Controls"** y se puede retirar el escudo.
   (no al final, que se vería como un enfoque tardío). Escalonado en seis tiempos; el botón remata con
   una curva propia, más larga, para que su halo florezca al aterrizar.
 
+## Marca
+
+El logo sale de `evento-paraguay/Assets/logo-flecha-2026-09-19`. En el repo:
+
+- `logo.svg` — variante dorada sobre transparente, recortada al dibujo. Va en el pie.
+- `favicon.svg` — variante 03 (negro sobre degradado amarillo), que es la que más aguanta a 16 px.
+- `apple-touch-icon.png` (180) e `icon-512.png`, generados desde el favicon.
+
 ## Imagen social
 
-`og.jpg` (1200×630) se regenera desde `_dev/og.html`:
+`og.png` (1200×630) lleva la promesa a la izquierda y una **preview de la propia página** a la
+derecha. Se regenera desde `_dev/og.html`, que primero captura la página del servidor local:
 
 ```
 /Users/danifcn/mac-vault/.claude/skills/excalidraw-diagram/references/.venv/bin/python _dev/og.py
 ```
 
-Hay que volver a generarla cada vez que cambie el titular.
+Hay que volver a generarla cada vez que cambie el titular o el diseño. Necesita el servidor local levantado.
 
 ## Comprobado en navegador real
 
