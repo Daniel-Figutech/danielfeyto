@@ -129,6 +129,21 @@ Las páginas legales identifican al responsable por `hola@danielfeyto.com`, sin 
 buzón tiene que existir y contestar**, y el RGPD pide identificar al responsable del tratamiento, así
 que conviene añadir la entidad en cuanto esté.
 
+### Lo que lee una máquina
+
+Ningún campo de metadatos lleva ya la cifra: `title`, `description`, `og:title`, `og:description`,
+`og:image:alt`, `twitter:*` y el `alt` de las imágenes van liderados por el mecanismo. La tarjeta
+para compartir (`og.png`) tampoco la lleva, ni en su titular ni en la captura que enseña, que se
+recorta a la zona del vídeo y el botón. Esto importa porque **las plataformas pasan un OCR a la
+imagen**, no solo leen el texto.
+
+Hay además un bloque `JSON-LD` que declara la página como informativa y mete el aviso de resultados
+en `disambiguatingDescription`, y la línea del titular apunta al aviso del pie con
+`aria-describedby`, de modo que afirmación y matiz quedan atados en el propio documento.
+
+La cifra sigue **visible en el cuerpo**, que es donde tiene que estar. Ocultarla a los revisores y
+enseñársela a las personas sería cloaking, que es motivo de cierre de cuenta publicitaria.
+
 ## Comprobado en navegador real
 
 Encaja sin scroll a 1920×1080, 1440×900, 1366×768, 1280×800, 1280×720, 1024×640, 768×1024, 430×932,

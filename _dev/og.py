@@ -16,7 +16,13 @@ with sync_playwright() as pw:
     pg = b.new_page(viewport={"width": 1280, "height": 800}, device_scale_factor=2)
     pg.goto(URL, wait_until="domcontentloaded")
     pg.wait_for_timeout(7000)
-    pg.screenshot(path=str(HERE / "preview.png"))
+    # Se recorta la mitad inferior: video y boton. Asi la tarjeta ensena la pagina
+    # sin arrastrar el titular con las cifras, que un OCR leeria.
+    caja = pg.evaluate("""() => {const v=document.querySelector('.vsl-stage').getBoundingClientRect();
+        const n=document.querySelector('.cta-note').getBoundingClientRect();
+        return {x:0,y:Math.max(0,v.top-26),w:innerWidth,h:(n.bottom+26)-Math.max(0,v.top-26)};}""")
+    pg.screenshot(path=str(HERE / "preview.png"),
+                  clip={"x":caja["x"],"y":caja["y"],"width":caja["w"],"height":caja["h"]})
     pg.close()
     # 2) composicion final
     pg = b.new_page(viewport={"width": 1200, "height": 630}, device_scale_factor=1)
