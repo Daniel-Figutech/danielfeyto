@@ -14,12 +14,45 @@ Cloudflare Pages conectado a este repo.
 
 | Qué | Dónde | Ahora mismo |
 |---|---|---|
-| Destino del CTA | `<a class="cta" href="#">` | `#` — **pendiente**: URL del formulario o del calendario |
+| Destino del CTA | `<a class="cta">` | Abre el modal de la lista de espera (formulario GHL `uPi9t8JSNLjUciI0ZOIs`). Sin JS, lleva al formulario alojado |
 | Vídeo de la VSL | `#vsl-frame` → `src` | Bunny `583428 / 5c6e7217-086b-44c4-a8d2-9f5132fced85` (provisional) |
 
 Para cambiar el vídeo basta con sustituir la librería y el GUID dentro de la URL del embed. Mantén
 `autoplay=true&muted=true`: los navegadores bloquean el autoplay con sonido, y por eso existe la
 capa de "toca para activar el sonido", que además rebobina a 0 para no perder los primeros segundos.
+
+## Lista de espera (formulario de GHL)
+
+El botón abre un modal propio (`<dialog id="lista">`) con el formulario "form dani" de GHL dentro.
+El formulario vive en un iframe de otro dominio, así que **su aspecto se decide en GHL**, no aquí:
+
+- **`_dev/ghl-form.css` se pega en GHL** (Sites, Forms, form dani, Styles, Custom CSS). Quita la
+  tarjeta blanca, pone los campos oscuros, las etiquetas en caja alta y el botón crema con halo y badge,
+  como el de la landing. Sin ese CSS el formulario sale blanco con el botón azul de GHL.
+- En GHL también: idioma del formulario en español (si no, los errores salen como "Email is required")
+  y el texto del botón corto, **"Apuntarme"**: "Entrar en la lista de espera" parte en dos líneas en móvil.
+
+Cómo funciona por dentro, y por qué:
+
+1. **Carga diferida.** El iframe y `form_embed.js` se cargan 1,5 s después del `load` (o a los 5 s
+   como tarde, o al pasar el ratón por el botón), para no quitarle ancho de banda a la VSL.
+2. **El iframe va dentro de `#inline-uPi9t8JSNLjUciI0ZOIs-wrapper`.** Si no existe ese contenedor,
+   `form_embed.js` mete el iframe en uno suyo, y mover un iframe en el DOM lo recarga: el formulario
+   cargaba dos veces y parpadeaba. Con ese id, el script lo deja donde está.
+3. **Cerrado no está en `display:none`.** Está maquetado fuera de pantalla, `visibility:hidden` e
+   `inert`. Con `display:none` GHL medía el formulario sin ancho (976 px de alto) y al abrir daba un salto.
+   `inert` hace falta porque GHL fuerza `visibility:visible` en el iframe.
+4. **Esqueleto** con la forma del formulario mientras carga. Se retira cuando `form_embed.js` enseña
+   el iframe, que es cuando ya tiene su altura definitiva.
+5. **Estado final propio.** Al registrarse el contacto, GHL manda a la página un `postMessage`
+   `set-sticky-contacts` con los datos. Ahí el modal cambia el formulario por "Ya estás dentro", con el
+   nombre si lo han puesto, y el mensaje de gracias de GHL no llega a verse.
+6. **El vídeo se pausa** al abrir el modal y se reanuda al cerrarlo, solo si lo pausó el modal.
+7. El velo (oscuro y desenfocado) va en `::backdrop`. Ojo al verificar: el WebKit de Playwright no
+   pinta ningún `backdrop-filter`, así que ahí el fondo sale nítido. El desenfoque se comprueba en Chromium.
+
+Se cierra con la X, con Esc, con un clic fuera de la tarjeta y con "Volver al vídeo". El foco vuelve
+al botón al cerrar.
 
 ## Cómo se controla el vídeo
 

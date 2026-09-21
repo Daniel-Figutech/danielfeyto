@@ -550,6 +550,175 @@ body{
 .cta:focus-visible{outline:2px solid var(--gold-b);outline-offset:4px}
 .cta:active{transform:translateY(0)}
 
+/* ---------- lista de espera: modal con el formulario de GHL ---------- */
+/* El <dialog> ocupa toda la pantalla y hace de capa de scroll; la tarjeta va
+   dentro, así la entrada y la salida se controlan con clases.
+   OJO: nada de color-scheme aquí. Si la página y el iframe declaran esquemas
+   distintos, el navegador pinta el iframe opaco y el formulario sale en blanco. */
+html.ws-open,html.ws-open body{overflow:hidden}
+.ws{
+  position:fixed;inset:0;z-index:50;
+  width:100%;height:100%;max-width:none;max-height:none;
+  margin:0;padding:0;border:0;
+  background:transparent;color:var(--white);
+  overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;
+}
+.ws::backdrop{
+  background:rgba(4,3,2,.74);
+  -webkit-backdrop-filter:blur(10px) saturate(1.08);
+          backdrop-filter:blur(10px) saturate(1.08);
+  opacity:0;transition:opacity .4s cubic-bezier(.16,1,.3,1);
+}
+/* El velo va en ::backdrop, que es la capa que el navegador pone entre la página
+   y el modal. Valores literales: ::backdrop no hereda las variables de :root.
+   Al verificar: el WebKit de Playwright no pinta NINGÚN backdrop-filter, así que
+   ahí el fondo sale nítido; el desenfoque se comprueba en Chromium. */
+.ws.is-in::backdrop{opacity:1}
+.ws.is-out::backdrop{opacity:0;transition-duration:.26s}
+/* Cerrado NO va en display:none: así el formulario precargado se maqueta con su
+   ancho real y GHL le calcula bien la altura (con display:none medía 976 px y al
+   abrir daba un salto). Queda fuera de pantalla y con el atributo inert, que lo
+   saca del tabulador y de los lectores aunque GHL fuerce visibility en el iframe. */
+.ws:not([open]){display:block;left:-300vw;right:auto;visibility:hidden;pointer-events:none}
+.ws__center{
+  position:relative;min-height:100%;
+  display:flex;align-items:center;justify-content:center;
+  padding:calc(16px + env(safe-area-inset-top,0px)) calc(16px + env(safe-area-inset-right,0px))
+          calc(16px + env(safe-area-inset-bottom,0px)) calc(16px + env(safe-area-inset-left,0px));
+}
+.ws__panel{
+  position:relative;width:min(468px,100%);
+  padding:clamp(28px,6vw,38px) clamp(24px,5.6vw,34px) clamp(22px,4.6vw,28px);
+  border-radius:26px;text-align:center;
+  background:
+    radial-gradient(110% 55% at 50% 0%,rgba(var(--gold-rgb),.095),transparent 62%),
+    linear-gradient(180deg,#15100A,#0B0806 72%);
+  box-shadow:
+    0 0 0 1px rgba(var(--gold-rgb),.15),
+    inset 0 1px 0 rgba(255,255,255,.07),
+    0 40px 90px -30px rgba(0,0,0,.95),
+    0 0 90px -14px rgba(var(--gold-rgb),.17);
+  opacity:0;
+}
+.ws__panel:focus{outline:none}
+.ws.is-in .ws__panel{animation:wsIn .75s var(--ease) both}
+.ws.is-out .ws__panel{animation:wsOut .26s ease both}
+/* el desenfoque se resuelve a mitad del recorrido y el final es filter:none */
+@keyframes wsIn{
+  0%  {opacity:0;transform:translate3d(0,22px,0) scale(.985);filter:blur(8px)}
+  45% {filter:blur(0)}
+  100%{opacity:1;transform:none;filter:none}
+}
+@keyframes wsOut{
+  0%  {opacity:1;transform:none}
+  100%{opacity:0;transform:translate3d(0,12px,0) scale(.99)}
+}
+
+.ws__close{
+  position:absolute;top:14px;right:14px;z-index:3;
+  display:grid;place-items:center;width:40px;height:40px;padding:0;
+  border:0;border-radius:50%;cursor:pointer;
+  background:rgba(255,255,255,.05);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.09);
+  color:rgba(255,255,255,.62);
+  transition:background .25s ease,color .25s ease;
+  -webkit-appearance:none;appearance:none;
+}
+.ws__close:hover{background:rgba(255,255,255,.10);color:#fff}
+.ws__close:focus-visible{outline:2px solid var(--gold-b);outline-offset:2px}
+.ws__close svg{width:16px;height:16px;display:block}
+
+.ws__eyebrow{
+  margin:0 0 14px;
+  font-size:12.5px;font-weight:700;line-height:1.3;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(255,255,255,.55);
+}
+.ws__title{
+  margin:0;
+  font-family:'Jersey 25',ui-monospace,monospace;font-weight:400;
+  font-size:clamp(35px,9vw,44px);line-height:1.02;letter-spacing:0;
+  color:#fff;
+}
+.ws__sub{
+  margin:12px auto 0;
+  font-size:clamp(15px,3.9vw,16px);line-height:1.5;
+  color:rgba(255,255,255,.64);
+  text-wrap:balance;
+}
+.ws__rule{
+  height:1px;margin:24px 0 20px;border:0;
+  background:linear-gradient(90deg,transparent,rgba(var(--gold-rgb),.26) 50%,transparent);
+}
+
+/* El formulario vive en un iframe de GHL. Su CSS (en _dev/ghl-form.css, pegado
+   en GHL) deja 24 px a los lados y 30 abajo para que el halo del botón no se
+   corte en el filo del iframe; aquí se compensan con márgenes negativos para
+   que los campos queden alineados con la cabecera. */
+.ws__form{position:relative;margin:0 -24px;text-align:left}
+.ws__form:not(.is-ready){min-height:396px}
+.ws__frame{position:relative;z-index:1;opacity:0;transition:opacity .45s ease}
+.ws__form.is-ready .ws__frame{opacity:1}
+.ws__frame iframe{display:block;width:100%;border:0}
+.ws__skel{
+  position:absolute;z-index:0;top:2px;left:24px;right:24px;
+  display:flex;flex-direction:column;
+  transition:opacity .35s ease;pointer-events:none;
+}
+.ws__form.is-ready .ws__skel{opacity:0}
+.ws__skel i,.ws__skel b,.ws__skel u{display:block;position:relative;overflow:hidden}
+.ws__skel i{width:34%;height:10px;margin:2px 0 11px;border-radius:4px;background:rgba(255,255,255,.08)}
+.ws__skel b{height:52px;margin-bottom:14px;border-radius:12px;
+  background:rgba(255,255,255,.035);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.ws__skel u{height:58px;margin-top:8px;border-radius:999px;background:rgba(246,241,231,.11)}
+.ws__skel i::after,.ws__skel b::after,.ws__skel u::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.07) 50%,transparent 70%);
+  transform:translateX(-100%);animation:shimmer 1.4s ease-in-out infinite;
+}
+@keyframes shimmer{to{transform:translateX(100%)}}
+
+.ws__legal{
+  position:relative;z-index:2;
+  margin:4px auto 0;max-width:36ch;
+  font-size:13px;line-height:1.5;
+  color:rgba(255,255,255,.5);
+  text-wrap:balance;
+}
+.ws__legal a{color:rgba(var(--gold-rgb),.9);text-decoration:none;border-bottom:1px solid rgba(var(--gold-rgb),.32);transition:border-color .3s var(--ease)}
+.ws__legal a:hover{border-color:rgba(var(--gold-rgb),.9)}
+.ws__legal a:focus-visible{outline:2px solid var(--gold-b);outline-offset:3px;border-radius:2px}
+
+/* estado final: sustituye al formulario cuando GHL confirma el registro */
+.ws__ok{display:none;flex-direction:column;align-items:center;padding:6px 0 4px}
+.ws__panel.is-done .ws__form,.ws__panel.is-done .ws__legal,
+.ws__panel.is-done .ws__rule,.ws__panel.is-done .ws__head{display:none}
+.ws__panel.is-done .ws__ok{display:flex;animation:wsOk .8s var(--ease) both}
+@keyframes wsOk{
+  0%  {opacity:0;transform:translate3d(0,14px,0);filter:blur(6px)}
+  45% {filter:blur(0)}
+  100%{opacity:1;transform:none;filter:none}
+}
+.ws__ok:focus{outline:none}
+.ws__ok-ico{
+  display:grid;place-items:center;
+  width:72px;height:72px;margin-bottom:20px;border-radius:50%;
+  background:radial-gradient(circle at 50% 40%,rgba(52,36,7,.9),rgba(12,9,4,.94));
+  box-shadow:0 0 0 1px rgba(var(--gold-rgb),.32),0 0 38px rgba(var(--gold-rgb),.22);
+  color:var(--gold-b);
+}
+.ws__ok-ico svg{width:44%;height:44%;display:block}
+.ws__ok .ws__sub{margin-bottom:26px}
+.ws__back{border:0;font:inherit;cursor:pointer;-webkit-appearance:none;appearance:none}
+/* pantallas bajas: se aprieta la cabecera para que el formulario quepa sin scroll */
+@media (max-height:760px){
+  .ws__panel{padding-top:24px}
+  .ws__eyebrow{margin-bottom:10px}
+  .ws__title{font-size:clamp(32px,8.4vw,38px)}
+  .ws__sub{margin-top:8px;font-size:15px}
+  .ws__rule{margin:18px 0 16px}
+}
+
 
 /* ---------- reduced motion ---------- */
 @media (forced-colors:active){
@@ -563,6 +732,10 @@ body{
   .flow,.eyebrow__px,.cta-note__dot,.vsl-backlight,.vsl-ico,.vsl-ico .wv1,.vsl-ico .wv2{animation:none}
   .flow{background-position:-340px center,0 0}
   .cta,.cta__badge{transition:none}
+  .ws.is-in .ws__panel,.ws.is-out .ws__panel,.ws__panel.is-done .ws__ok{animation:none;opacity:1}
+  .ws.is-out .ws__panel{opacity:0}
+  .ws::backdrop,.ws__frame,.ws__skel{transition:none}
+  .ws__skel i::after,.ws__skel b::after,.ws__skel u::after{animation:none}
 }
 </style>
 </head>
@@ -653,8 +826,8 @@ body{
   </div>
 
   <div class="cta-slot rise d6">
-    <!-- ⚠️ CAMBIAR href por la URL real del formulario / calendario -->
-    <a class="cta" href="#">
+    <!-- Abre el modal de la lista de espera. Sin JS, el enlace lleva al formulario alojado en GHL -->
+    <a class="cta" href="https://api.leadconnectorhq.com/widget/form/uPi9t8JSNLjUciI0ZOIs" aria-haspopup="dialog" aria-controls="lista">
       <span class="cta__label">Entrar en lista de espera</span>
       <span class="cta__badge" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
@@ -689,6 +862,84 @@ body{
     <a href="/aviso-legal">Aviso legal</a>
   </nav>
 </footer>
+
+<dialog class="ws" id="lista" aria-labelledby="ws-titulo" aria-describedby="ws-sub" inert>
+ <div class="ws__center">
+  <div class="ws__panel" tabindex="-1" autofocus>
+    <button class="ws__close" type="button" aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+
+    <div class="ws__head">
+      <p class="ws__eyebrow"><span class="eyebrow__px" aria-hidden="true"></span>Lista de espera</p>
+      <h2 class="ws__title" id="ws-titulo">Te guardamos <span class="flow">el&nbsp;sitio</span></h2>
+      <p class="ws__sub" id="ws-sub">Trabajamos con 2 negocios al mes.<br> Cuando se libere una plaza, te escribimos.</p>
+    </div>
+    <hr class="ws__rule">
+
+    <div class="ws__form">
+      <div class="ws__skel" aria-hidden="true"><i></i><b></b><i></i><b></b><i></i><b></b><u></u></div>
+      <!-- Formulario "form dani" de GHL. El src se pone desde JS (carga diferida,
+           para no competir con la VSL). Los data-* los lee form_embed.js: no tocar.
+           El contenedor con id "<id del iframe>-wrapper" es a propósito: si no existe,
+           form_embed.js mete el iframe en su propio contenedor, y mover un iframe en
+           el DOM lo RECARGA (el formulario cargaba dos veces y parpadeaba). -->
+      <div class="ws__frame" id="inline-uPi9t8JSNLjUciI0ZOIs-wrapper"><iframe
+        data-src="https://api.leadconnectorhq.com/widget/form/uPi9t8JSNLjUciI0ZOIs"
+        style="width:100%;height:448px;border:none"
+        id="inline-uPi9t8JSNLjUciI0ZOIs"
+        data-layout="{'id':'INLINE'}"
+        data-trigger-type="alwaysShow"
+        data-trigger-value=""
+        data-activation-type="alwaysActivated"
+        data-activation-value=""
+        data-deactivation-type="neverDeactivate"
+        data-deactivation-value=""
+        data-form-name="form dani"
+        data-height="433"
+        data-layout-iframe-id="inline-uPi9t8JSNLjUciI0ZOIs"
+        data-form-id="uPi9t8JSNLjUciI0ZOIs"
+        data-cookie-consent="true"
+        data-cookie-consent-provider="auto"
+        title="Formulario de la lista de espera"></iframe></div>
+    </div>
+    <p class="ws__legal">Solo usamos tus datos para avisarte. Detalles en la <a href="/privacidad" target="_blank" rel="noopener">política de privacidad</a>.</p>
+
+    <div class="ws__ok" id="ws-ok" tabindex="-1">
+      <span class="ws__ok-ico" aria-hidden="true">
+        <!-- check pixel, rejilla 21x21 -->
+        <svg viewBox="0 0 21 21" shape-rendering="crispEdges" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="10" width="2" height="2"/>
+          <rect x="4" y="11" width="2" height="2"/>
+          <rect x="5" y="12" width="2" height="2"/>
+          <rect x="6" y="13" width="2" height="2"/>
+          <rect x="7" y="14" width="2" height="2"/>
+          <rect x="9" y="12" width="2" height="2"/>
+          <rect x="8" y="13" width="2" height="2"/>
+          <rect x="10" y="11" width="2" height="2"/>
+          <rect x="11" y="10" width="2" height="2"/>
+          <rect x="12" y="9" width="2" height="2"/>
+          <rect x="13" y="8" width="2" height="2"/>
+          <rect x="14" y="7" width="2" height="2"/>
+          <rect x="15" y="6" width="2" height="2"/>
+          <rect x="16" y="5" width="2" height="2"/>
+        </svg>
+      </span>
+      <p class="ws__title">Ya estás <span class="flow">dentro</span></p>
+      <p class="ws__sub" id="ws-ok-txt">Te escribimos en cuanto se libere una plaza.</p>
+      <button class="cta ws__back" type="button">
+        <span class="cta__label">Volver al vídeo</span>
+        <span class="cta__badge" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 17 17 7"/>
+            <path d="M9.5 7H17v7.5"/>
+          </svg>
+        </span>
+      </button>
+    </div>
+  </div>
+ </div>
+</dialog>
 
 <script>
 /* El vídeo caía en alturas y posiciones fraccionarias, así que el navegador
@@ -814,6 +1065,122 @@ document.addEventListener('animationend',function(e){
       else { player.play(); playing=true; }
     }catch(e){}
     paintState();
+  });
+
+  // el modal de la lista de espera pausa el vídeo y, al cerrarse, lo reanuda
+  // solo si lo pausó él (no pisa una pausa que haya puesto la persona)
+  var resumir=false;
+  document.addEventListener('lista:abre',function(){
+    if(!player||!ready||!playing) return;
+    try{ player.pause(); }catch(e){}
+    playing=false; resumir=true; paintState();
+  });
+  document.addEventListener('lista:cierra',function(){
+    if(!resumir) return;
+    resumir=false;
+    if(!player||!ready) return;
+    try{ player.play(); }catch(e){}
+    playing=true; paintState();
+  });
+})();
+
+/* Lista de espera: modal con el formulario de GHL.
+   - El iframe y form_embed.js se cargan tarde (reposo o intención de clic),
+     para que no compitan con la VSL.
+   - GHL avisa a la página con postMessage "set-sticky-contacts" cuando el
+     contacto queda registrado: ahí se cambia el formulario por el estado final. */
+(function(){
+  var dlg=document.getElementById('lista'),
+      cta=document.querySelector('.cta[aria-controls="lista"]'),
+      frame=document.getElementById('inline-uPi9t8JSNLjUciI0ZOIs');
+  if(!dlg||!cta||!frame||typeof dlg.showModal!=='function') return;   // sin <dialog>: el enlace abre el formulario alojado
+  var panel=dlg.querySelector('.ws__panel'),
+      caja=dlg.querySelector('.ws__form'),
+      ok=document.getElementById('ws-ok'),
+      okTxt=document.getElementById('ws-ok-txt'),
+      reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+      cargado=false, hecho=false, abajo=null, t=null;
+
+  function listo(){ caja.classList.add('is-ready'); }
+  function cargar(){
+    if(cargado) return;
+    cargado=true;
+    // form_embed.js oculta el iframe (visibility:hidden) hasta que el formulario
+    // tiene su altura definitiva, y entonces lo enseña: ese es el momento de
+    // retirar el esqueleto. Si el script no llega a ocultarlo, vale el load.
+    var oculto=false;
+    new MutationObserver(function(){
+      var v=frame.style.visibility;
+      if(v==='hidden') oculto=true;
+      else if(v==='visible'&&oculto) listo();
+    }).observe(frame,{attributes:true,attributeFilter:['style']});
+    frame.addEventListener('load',function(){ setTimeout(function(){ if(!oculto) listo(); },1200); },{once:true});
+    setTimeout(listo,8000);                                           // respaldo
+    frame.src=frame.getAttribute('data-src');
+    var s=document.createElement('script');
+    s.src='https://link.msgsndr.com/js/form_embed.js'; s.async=true;
+    document.body.appendChild(s);
+  }
+  ['pointerenter','touchstart','focus'].forEach(function(ev){
+    cta.addEventListener(ev,cargar,{once:true,passive:true});
+  });
+  // precarga cuando la VSL ya ha arrancado: 1,5 s después del load, o a los 5 s como tarde
+  window.addEventListener('load',function(){ setTimeout(cargar,1500); });
+  setTimeout(cargar,5000);
+
+  function abrir(e){
+    if(e){ e.preventDefault(); }
+    cargar();
+    if(dlg.open) return;
+    clearTimeout(t);
+    dlg.classList.remove('is-out');
+    dlg.inert=false;
+    dlg.showModal();
+    dlg.scrollTop=0;                                  // el autofocus no debe desplazar la capa
+    document.documentElement.classList.add('ws-open');
+    requestAnimationFrame(function(){ dlg.classList.add('is-in'); });
+    document.dispatchEvent(new CustomEvent('lista:abre'));
+  }
+  function cerrar(){
+    if(!dlg.open||dlg.classList.contains('is-out')) return;
+    dlg.classList.remove('is-in');
+    dlg.classList.add('is-out');
+    t=setTimeout(function(){
+      dlg.close();
+      dlg.inert=true;
+      dlg.classList.remove('is-out');
+      document.documentElement.classList.remove('ws-open');
+      document.dispatchEvent(new CustomEvent('lista:cierra'));
+    },reduce?0:260);
+  }
+
+  cta.addEventListener('click',abrir);
+  dlg.addEventListener('cancel',function(e){ e.preventDefault(); cerrar(); });   // Esc
+  dlg.querySelector('.ws__close').addEventListener('click',cerrar);
+  dlg.querySelector('.ws__back').addEventListener('click',cerrar);
+  // clic fuera de la tarjeta: solo si el gesto empieza Y acaba fuera (no al soltar una selección)
+  dlg.addEventListener('pointerdown',function(e){ abajo=panel.contains(e.target); });
+  dlg.addEventListener('click',function(e){
+    if(abajo===false&&!panel.contains(e.target)) cerrar();
+    abajo=null;
+  });
+
+  window.addEventListener('message',function(e){
+    if(hecho||e.source!==frame.contentWindow) return;
+    var d=e.data;
+    if(!Array.isArray(d)||d[0]!=='set-sticky-contacts') return;
+    hecho=true;
+    var nombre='';
+    try{
+      var c=JSON.parse(d[2])||{};
+      nombre=String(c.first_name||c.firstName||c.full_name||c.name||'').trim().split(/\s+/)[0]||'';
+    }catch(_){}
+    if(nombre){
+      nombre=nombre.charAt(0).toUpperCase()+nombre.slice(1).toLowerCase();
+      okTxt.textContent='Gracias, '+nombre+'. Te escribimos en cuanto se libere una plaza.';
+    }
+    panel.classList.add('is-done');
+    ok.focus({preventScroll:true});
   });
 })();
 </script>
