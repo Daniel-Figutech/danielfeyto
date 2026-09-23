@@ -196,8 +196,8 @@ body{
 .h1 .ln{display:block;text-wrap:balance}
 .h1 h1.ln{margin:0;font:inherit;letter-spacing:inherit}
 .h1 .br-m{display:none}
-/* glow LED: núcleo blanco fino + halo cálido. Va en spans hermanos del recuadro .gh, nunca en un ancestro (recortaría su bloom) */
-.glo{filter:drop-shadow(0 0 .02em #fff) drop-shadow(0 0 .12em rgba(255,240,200,.35))}
+/* glow sutil: un filo de luz de .025em al 28%. Va en spans hermanos del recuadro .gh, nunca en un ancestro (recortaría su bloom). El LED doble del estudio resultó excesivo en la landing */
+.glo{filter:drop-shadow(0 0 .025em rgba(255,255,255,.28))}
 @media (max-width:680px){
   .h1{line-height:1.1;font-size:calc(7.1vw + 1.6px)}
   .h1 .ln{display:inline;text-wrap:initial}
