@@ -1,13 +1,17 @@
 <!doctype html><html lang="es"><head><meta charset="utf-8">
 <!-- Fuente de og.png. Regenerar con _dev/og.py tras cambiar el titular o el diseno. -->
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Jersey+25&family=Miriam+Libre:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Miriam+Libre:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'Matriz LED';font-weight:700;src:url('../fonts/MatrizLED-PantallaBold.otf') format('opentype')}
+@font-face{font-family:'Matriz LED Macizo';font-weight:700;src:url('../fonts/MatrizLED-MacizoBold.otf') format('opentype')}
+</style>
 <style>
 
 /* ============================================================
    danielfeyto.com — hero
    Marca: oro "flow" (base daddyespresso) sobre negro cálido.
-   Display: Jersey 25 (pixel). Texto: Miriam Libre.
+   Display: Matriz LED (matriz de puntos propia, fonts/). Texto: Miriam Libre.
    Iconos pixel dibujados sobre rejilla 9x9 / 21x21, al estilo
    del set Pixel de Streamline (CC BY 4.0) que sirvió de guía.
    ============================================================ */
@@ -125,7 +129,7 @@ body{
 
 /* ---------- titular ---------- */
 .h1{
-  font-family:'Jersey 25',ui-monospace,monospace;
+  font-family:'Matriz LED',ui-monospace,monospace;
   font-weight:400;
   font-size:clamp(2.2rem,5.3vw,4rem);
   line-height:1.06;
@@ -396,7 +400,7 @@ body{
 }
 .vsl-txt b{
   display:block;margin-top:.28em;
-  font-family:'Jersey 25',monospace;font-weight:400;
+  font-family:'Matriz LED Macizo',monospace;font-weight:700;
   font-size:clamp(17px,3.4vw,24px);letter-spacing:.01em;
   color:var(--gold-b);
 }
@@ -516,9 +520,9 @@ body{width:1200px;height:630px;overflow:hidden;position:relative}
 .left{display:flex;flex-direction:column;align-items:flex-start;text-align:left}
 .brand{display:flex;align-items:center;gap:13px;margin-bottom:26px}
 .brand img{width:62px;height:auto;display:block;opacity:.92}
-.brand span{font-family:'Jersey 25',monospace;font-size:23px;letter-spacing:.02em;color:rgba(255,255,255,.5)}
+.brand span{font-family:'Matriz LED Macizo',monospace;font-weight:700;font-size:23px;letter-spacing:.02em;color:rgba(255,255,255,.5)}
 .eyebrow{font-size:17px;margin-bottom:16px;white-space:normal;text-align:left}
-.ogh1{font-family:'Jersey 25',monospace;font-weight:400;font-size:58px;line-height:1.08;letter-spacing:0;margin:0;color:#fff}
+.ogh1{font-family:'Matriz LED',monospace;font-weight:700;font-size:62.5px;line-height:1.08;letter-spacing:0;margin:0;color:#fff}
 .ogh1 .ln{display:block}
 .ogsub{margin:20px 0 0;font-size:21px;line-height:1.45;color:rgba(255,255,255,.62)}
 .ognota{margin:14px 0 0;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.34)}

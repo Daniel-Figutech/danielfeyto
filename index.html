@@ -57,15 +57,16 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://player.mediadelivery.net" crossorigin>
-<link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/jersey25/v4/ll8-K2eeXj2tAs6F9BX4IIoNvAwShQ.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/MatrizLED-PantallaBold.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/MatrizLED-MacizoBold.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/miriamlibre/v19/DdTh798HsHwubBAqfkcBTL_fZ5P-b-i39w.woff2">
-<link href="https://fonts.googleapis.com/css2?family=Jersey+25&family=Miriam+Libre:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Miriam+Libre:wght@400;500;700&display=swap" rel="stylesheet">
 
 <style>
 /* ============================================================
    danielfeyto.com — hero
    Marca: oro "flow" (base daddyespresso) sobre negro cálido.
-   Display: Jersey 25 (pixel). Texto: Miriam Libre.
+   Display: Matriz LED (matriz de puntos propia, fonts/). Texto: Miriam Libre.
    Iconos pixel dibujados sobre rejilla 9x9 / 21x21, al estilo
    del set Pixel de Streamline (CC BY 4.0) que sirvió de guía.
    ============================================================ */
@@ -182,10 +183,12 @@ body{
 @keyframes blip{0%,72%{opacity:1}73%,100%{opacity:.22}}
 
 /* ---------- titular ---------- */
+@font-face{font-family:'Matriz LED';font-weight:700;src:url('fonts/MatrizLED-PantallaBold.woff2') format('woff2'),url('fonts/MatrizLED-PantallaBold.otf') format('opentype');font-display:swap}
+@font-face{font-family:'Matriz LED Macizo';font-weight:700;src:url('fonts/MatrizLED-MacizoBold.woff2') format('woff2'),url('fonts/MatrizLED-MacizoBold.otf') format('opentype');font-display:swap}
 .h1{
-  font-family:'Jersey 25',ui-monospace,monospace;
-  font-weight:400;
-  font-size:clamp(2.2rem,5.3vw,4rem);
+  font-family:'Matriz LED',ui-monospace,monospace;
+  font-weight:700;
+  font-size:clamp(2.2rem,5.3vw,62.5px);
   line-height:1.06;
   letter-spacing:0;
   margin:0;
@@ -194,7 +197,7 @@ body{
 .h1 h1.ln{margin:0;font:inherit;letter-spacing:inherit}
 .h1 .br-m{display:none}
 @media (max-width:680px){
-  .h1{line-height:1.1;font-size:min(35.2px,calc(9.05vw - 3px))}
+  .h1{line-height:1.1;font-size:calc(7.1vw + 1.6px)}
   .h1 .ln{display:inline;text-wrap:initial}
   .h1 .ln + .ln{margin-top:0}
   .h1 .br-m{display:inline}
@@ -386,7 +389,7 @@ body{
 }
 @media (min-width:561px) and (max-height:830px){
   .vsl-stage{max-width:min(490px,100%);margin-top:clamp(.9rem,2.2svh,1.5rem)}
-  .h1{font-size:clamp(2.2rem,4.1vw,3.2rem)}
+  .h1{font-size:clamp(2.2rem,4.1vw,46.875px)}
   .eyebrow{margin-bottom:.85rem}
   .sub{margin-top:.85rem}
   .cta-slot{margin-top:1.05rem}
@@ -403,7 +406,7 @@ body{
 }
 @media (min-width:1500px) and (min-height:1040px){
   .hero__inner{max-width:1280px}
-  .h1{font-size:4.9rem}
+  .h1{font-size:62.5px}
   .sub{font-size:1.3rem}
   .eyebrow{font-size:15px}
   .vsl-stage{max-width:min(740px,100%)}
@@ -454,7 +457,7 @@ body{
 }
 .vsl-txt b{
   display:block;margin-top:.28em;
-  font-family:'Jersey 25',monospace;font-weight:400;
+  font-family:'Matriz LED Macizo',ui-monospace,monospace;font-weight:700;
   font-size:clamp(17px,3.4vw,24px);letter-spacing:.01em;
   color:var(--gold-b);
 }
@@ -636,7 +639,7 @@ html.ws-open,html.ws-open body{overflow:hidden}
 }
 .ws__title{
   margin:0;
-  font-family:'Jersey 25',ui-monospace,monospace;font-weight:400;
+  font-family:'Matriz LED Macizo',ui-monospace,monospace;font-weight:700;
   font-size:clamp(35px,9vw,44px);line-height:1.02;letter-spacing:0;
   color:#fff;
 }
