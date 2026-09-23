@@ -57,8 +57,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://player.mediadelivery.net" crossorigin>
-<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/MatrizLED-PantallaBold.woff2">
-<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/MatrizLED-MacizoBold.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/danielfeyto-PantallaBold.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="fonts/danielfeyto-MacizoBold.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/miriamlibre/v19/DdTh798HsHwubBAqfkcBTL_fZ5P-b-i39w.woff2">
 <link href="https://fonts.googleapis.com/css2?family=Miriam+Libre:wght@400;500;700&display=swap" rel="stylesheet">
 
@@ -66,7 +66,7 @@
 /* ============================================================
    danielfeyto.com — hero
    Marca: oro "flow" (base daddyespresso) sobre negro cálido.
-   Display: Matriz LED (matriz de puntos propia, fonts/). Texto: Miriam Libre.
+   Display: danielfeyto (matriz de puntos propia, fonts/). Texto: Miriam Libre.
    Iconos pixel dibujados sobre rejilla 9x9 / 21x21, al estilo
    del set Pixel de Streamline (CC BY 4.0) que sirvió de guía.
    ============================================================ */
@@ -183,10 +183,10 @@ body{
 @keyframes blip{0%,72%{opacity:1}73%,100%{opacity:.22}}
 
 /* ---------- titular ---------- */
-@font-face{font-family:'Matriz LED';font-weight:700;src:url('fonts/MatrizLED-PantallaBold.woff2') format('woff2'),url('fonts/MatrizLED-PantallaBold.otf') format('opentype');font-display:swap}
-@font-face{font-family:'Matriz LED Macizo';font-weight:700;src:url('fonts/MatrizLED-MacizoBold.woff2') format('woff2'),url('fonts/MatrizLED-MacizoBold.otf') format('opentype');font-display:swap}
+@font-face{font-family:'danielfeyto';font-weight:700;src:url('fonts/danielfeyto-PantallaBold.woff2') format('woff2'),url('fonts/danielfeyto-PantallaBold.otf') format('opentype');font-display:swap}
+@font-face{font-family:'danielfeyto Macizo';font-weight:700;src:url('fonts/danielfeyto-MacizoBold.woff2') format('woff2'),url('fonts/danielfeyto-MacizoBold.otf') format('opentype');font-display:swap}
 .h1{
-  font-family:'Matriz LED',ui-monospace,monospace;
+  font-family:'danielfeyto',ui-monospace,monospace;
   font-weight:700;
   font-size:clamp(2.2rem,5.3vw,62.5px);
   line-height:1.06;
@@ -196,6 +196,8 @@ body{
 .h1 .ln{display:block;text-wrap:balance}
 .h1 h1.ln{margin:0;font:inherit;letter-spacing:inherit}
 .h1 .br-m{display:none}
+/* glow LED: núcleo blanco fino + halo cálido. Va en spans hermanos del recuadro .gh, nunca en un ancestro (recortaría su bloom) */
+.glo{filter:drop-shadow(0 0 .02em #fff) drop-shadow(0 0 .12em rgba(255,240,200,.35))}
 @media (max-width:680px){
   .h1{line-height:1.1;font-size:calc(7.1vw + 1.6px)}
   .h1 .ln{display:inline;text-wrap:initial}
@@ -457,7 +459,7 @@ body{
 }
 .vsl-txt b{
   display:block;margin-top:.28em;
-  font-family:'Matriz LED Macizo',ui-monospace,monospace;font-weight:700;
+  font-family:'danielfeyto Macizo',ui-monospace,monospace;font-weight:700;
   font-size:clamp(17px,3.4vw,24px);letter-spacing:.01em;
   color:var(--gold-b);
 }
@@ -639,7 +641,7 @@ html.ws-open,html.ws-open body{overflow:hidden}
 }
 .ws__title{
   margin:0;
-  font-family:'Matriz LED Macizo',ui-monospace,monospace;font-weight:700;
+  font-family:'danielfeyto Macizo',ui-monospace,monospace;font-weight:700;
   font-size:clamp(35px,9vw,44px);line-height:1.02;letter-spacing:0;
   color:#fff;
 }
@@ -762,8 +764,8 @@ html.ws-open,html.ws-open body{overflow:hidden}
   </p>
 
   <div class="h1">
-    <span class="ln rise d2" aria-describedby="aviso-resultados">Añade de <span class="flow">10.000€</span> a <span class="flow flow--2">50.000€</span><br class="br-m"> a tu negocio</span>
-    <h1 class="ln rise d3">con 3 sistemas<br class="br-m"> <span class="gh"><span class="gh__box"><span class="gh__top" aria-hidden="true"></span><span class="gh__label">copia y pega</span></span></span></h1>
+    <span class="ln rise d2" aria-describedby="aviso-resultados"><span class="glo">Añade de <span class="flow">10.000€</span> a <span class="flow flow--2">50.000€</span><br class="br-m"> a tu negocio</span></span>
+    <h1 class="ln rise d3"><span class="glo">con 3 sistemas</span><br class="br-m"> <span class="gh"><span class="gh__box"><span class="gh__top" aria-hidden="true"></span><span class="gh__label">copia y pega</span></span></span></h1>
   </div>
 
   <p class="sub rise d4">Sin depender del orgánico, sin meter equipo.</p>
