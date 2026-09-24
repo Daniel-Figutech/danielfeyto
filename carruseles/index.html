@@ -1,16 +1,20 @@
 <!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="robots" content="noindex, nofollow"><meta name="theme-color" content="#050403"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><title>Carrusel Aesthetic | Daniel Feyto</title>
-<meta name="description" content="Una skill para Claude que convierte tus fotos en carruseles de Instagram terminados y listos para subir.">
+<meta name="description" content="Una skill para Claude que convierte tus fotos en carruseles de Instagram listos para subir.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Miriam+Libre:wght@400;700&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
    Carrusel Aesthetic · landing de la skill, dos secciones.
-   1 · La tesis: titular LED (tipografía danielfeyto) y un carrusel real pasando.
-   2 · La galaxia: las 60 slides de referencia de la skill, una secuencia por
-       brazo (portada en el centro, el resto hacia fuera) y anillos de hilo que
-       unen la misma posición entre secuencias, como una tela de araña.
-   Marca de danielfeyto.com: negro cálido, oro "flow", botón de píldora con halo.
+   1 · La galaxia (hero): las 60 slides de referencia de la skill, una secuencia por
+       brazo (portada junto al centro, el resto hacia fuera) y anillos de hilo que unen
+       la misma posición entre secuencias, como una tela de araña. En escritorio el
+       titular va en el hueco del centro; en el móvil la telaraña entera va arriba y
+       el mensaje debajo.
+   2 · Los ejemplos: un post que se desliza de verdad (scroll-snap, como en Instagram)
+       y los 10 carruseles hechos con la skill para elegir.
+   Marca de danielfeyto.com: negro cálido, oro "flow", titular LED danielfeyto,
+   botón de píldora con halo.
    ============================================================ */
 @font-face{font-family:'danielfeyto';font-weight:700;font-display:block;src:url(data:font/woff2;base64,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) format('woff2')}
 
@@ -19,7 +23,7 @@
   --noche:#050403;
   --oro-a:#C9953A; --oro-b:#FAD26B; --oro-c:#C49329; --oro-hi:#FFF6D8;
   --oro-box:#EDB630; --oro-box-rgb:237,182,48; --oro-rgb:250,210,107;
-  --tinta:#0B0906; --crema:#F6F1E7; --texto:#FFFFFF; --humo:rgba(255,255,255,.62);
+  --tinta:#0B0906; --crema:#F6F1E7; --texto:#FFFFFF; --humo:rgba(255,255,255,.64);
   --ease:cubic-bezier(.16,1,.3,1);
   --gut:clamp(20px,5vw,56px);
 }
@@ -30,8 +34,9 @@ body{margin:0;background:var(--noche);color:var(--texto);font-family:'Miriam Lib
 ::selection{background:rgba(var(--oro-rgb),.28);color:#fff}
 img{max-width:100%;display:block}
 main{overflow-x:clip}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;-webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent}
 
-.grano{position:fixed;inset:0;z-index:5;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
+.grano{position:fixed;inset:0;z-index:9000;pointer-events:none;opacity:.05;mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
 /* ---------- titulares LED, oro y recuadro dorado (receta h1-matriz-led / danielfeyto.com) ---------- */
@@ -42,8 +47,7 @@ main{overflow-x:clip}
   background-size:340px 100%,100% 100%;background-repeat:no-repeat;background-position:-340px center,0 0;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flowsweep 3.8s linear infinite}
 @keyframes flowsweep{0%{background-position:-340px center,0 0}100%{background-position:calc(100% + 340px) center,0 0}}
 .gh{display:inline-flex;margin:0 -.02em;margin-block:-.0723em;line-height:1;transform:rotate(-.55deg) translateZ(0);
-  filter:drop-shadow(0 0 20px rgba(var(--oro-box-rgb),.40)) drop-shadow(0 0 40px rgba(var(--oro-box-rgb),.15));animation:ignite 1.15s var(--ease) .55s both}
-@keyframes ignite{from{filter:drop-shadow(0 0 0 rgba(var(--oro-box-rgb),0)) drop-shadow(0 0 0 rgba(var(--oro-box-rgb),0))}to{filter:drop-shadow(0 0 20px rgba(var(--oro-box-rgb),.40)) drop-shadow(0 0 40px rgba(var(--oro-box-rgb),.15))}}
+  filter:drop-shadow(0 0 20px rgba(var(--oro-box-rgb),.40)) drop-shadow(0 0 40px rgba(var(--oro-box-rgb),.15))}
 .gh__box{position:relative;isolation:isolate;display:inline-flex;align-items:center;padding:.0275em .205em .117em;line-height:1;overflow:hidden;border-radius:.145em;background-color:var(--oro-box);
   box-shadow:0 0 0 1.5px rgba(var(--oro-box-rgb),.38),0 1px 0 rgba(255,255,255,.16) inset,0 -2px 0 rgba(118,66,0,.30) inset,0 -5px 8px -5px rgba(88,48,0,.28) inset,0 3px 7px rgba(0,0,0,.62)}
 .gh__box::before,.gh__box::after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;border-radius:inherit}
@@ -65,33 +69,9 @@ main{overflow-x:clip}
 .cta__badge svg{width:1.18em;height:1.18em;display:block}
 .cta:hover .cta__badge,.cta:focus-visible .cta__badge{transform:translate(2px,-2px)}
 
-/* ================= 1 · la tesis ================= */
-.s1{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(48px,7vw,120px);align-items:center;
-  max-width:1200px;margin:0 auto;padding:clamp(72px,12vh,140px) var(--gut) clamp(80px,12vh,140px)}
-.s1::before{content:"";position:absolute;z-index:-1;top:-260px;left:-10%;width:900px;height:700px;border-radius:50%;pointer-events:none;
-  background:radial-gradient(circle,rgba(var(--oro-rgb),.09),rgba(var(--oro-rgb),.025) 46%,transparent 68%);filter:blur(24px)}
-.h1{font-size:62.5px;line-height:1.08}
-@media (min-width:1320px){
-  .s1{max-width:1320px;grid-template-columns:minmax(0,1fr) 380px}
-  .h1{font-size:93.75px;line-height:1.06}   /* 3 px por punto: el titular manda */
-}
-.sub{margin:36px 0 0;max-width:30ch;font-size:clamp(19px,1.6vw,21px);line-height:1.5;color:var(--humo);text-wrap:pretty}
-.s1 .cta{margin-top:44px}
-
-.visor{position:relative;margin:0;width:100%;max-width:420px;justify-self:end;cursor:pointer}
-.visor::before{content:"";position:absolute;inset:-14% -14% -20%;z-index:0;pointer-events:none;border-radius:50%;
-  background:radial-gradient(60% 54% at 50% 46%,rgba(var(--oro-rgb),.17),rgba(201,149,58,.06) 52%,transparent 78%);filter:blur(50px)}
-.visor__marco{position:relative;z-index:1;padding:6px;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.085),rgba(255,255,255,.018) 40%,rgba(255,255,255,.045));
-  box-shadow:0 0 0 1px rgba(255,255,255,.045),0 40px 90px -30px rgba(0,0,0,.95)}
-.visor__ventana{position:relative;aspect-ratio:4/5;border-radius:16px;overflow:hidden;background:#000}
-.visor__pista{display:flex;height:100%;transition:transform .7s var(--ease)}
-.visor__pista img{flex:0 0 100%;width:100%;height:100%;object-fit:cover}
-
-/* ================= 2 · la galaxia ================= */
-.s2{position:relative;height:clamp(780px,100svh,1060px);overflow:hidden;isolation:isolate}
-.s2::before,.s2::after{content:"";position:absolute;left:0;right:0;height:22%;z-index:3000;pointer-events:none}
-.s2::before{top:0;background:linear-gradient(180deg,var(--noche),transparent)}
-.s2::after{bottom:0;background:linear-gradient(0deg,var(--noche),transparent)}
+/* ================= 1 · la galaxia ================= */
+.galaxia{position:relative;height:clamp(780px,100svh,1060px);overflow:hidden;isolation:isolate}
+.galaxia::after{content:"";position:absolute;left:0;right:0;bottom:0;height:22%;z-index:3000;pointer-events:none;background:linear-gradient(0deg,var(--noche),transparent)}
 .red{position:absolute;inset:0;z-index:1}
 .hilos{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:0}
 .hilos path{fill:none;stroke-linecap:round;stroke-linejoin:round}
@@ -99,40 +79,90 @@ main{overflow-x:clip}
 .hilos .h-brazo{stroke:var(--oro-b);stroke-width:1.4;opacity:.9;filter:drop-shadow(0 0 3px rgba(var(--oro-rgb),.8))}
 .hilos .h-pulso{stroke:var(--oro-hi);stroke-width:2.2;stroke-dasharray:.16 1;stroke-dashoffset:1.16;filter:drop-shadow(0 0 6px rgba(var(--oro-rgb),.95));animation:pulso 2.6s cubic-bezier(.45,0,.2,1) forwards}
 @keyframes pulso{to{stroke-dashoffset:0}}
+.hilos .h-nucleo{fill:var(--oro-b);filter:drop-shadow(0 0 6px rgba(var(--oro-rgb),.9)) drop-shadow(0 0 16px rgba(var(--oro-rgb),.5))}
 .nodo{position:absolute;left:0;top:0;border-radius:7px;overflow:hidden;background:#111;will-change:transform,opacity;transform-origin:50% 50%;
   box-shadow:0 0 0 1px rgba(255,255,255,.07),0 18px 40px -16px rgba(0,0,0,.9);transition:box-shadow .5s var(--ease)}
 .nodo img{width:100%;height:100%;object-fit:cover}
 .nodo.on{box-shadow:0 0 0 1.5px rgba(var(--oro-rgb),.9),0 0 26px rgba(var(--oro-rgb),.28),0 18px 40px -16px rgba(0,0,0,.9)}
-.centro{position:absolute;left:50%;top:50%;z-index:4000;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:40px;text-align:center;
+.nodo[hidden]{display:none}
+.centro{position:absolute;left:50%;top:50%;z-index:4000;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;text-align:center;
   padding:56px 72px;pointer-events:none}
-.centro::before{content:"";position:absolute;inset:-30% -18%;z-index:-1;border-radius:50%;background:radial-gradient(closest-side,rgba(5,4,3,.94),rgba(5,4,3,.78) 55%,rgba(5,4,3,0))}
-.centro .cta{pointer-events:auto}
-.h2{font-size:62.5px;line-height:1.1;white-space:nowrap}
+.centro::before{content:"";position:absolute;inset:-30% -18%;z-index:-1;border-radius:50%;background:radial-gradient(closest-side,rgba(5,4,3,.94),rgba(5,4,3,.8) 55%,rgba(5,4,3,0))}
+.centro .cta{pointer-events:auto;margin-top:40px}
+.h-galaxia{font-size:62.5px;line-height:1.1;white-space:nowrap}
+.centro .sub{margin:24px 0 0;max-width:34ch;font-size:19px;line-height:1.5;color:var(--humo);text-wrap:balance}
+
+/* ================= 2 · los ejemplos ================= */
+.ejemplos{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,460px);gap:clamp(48px,7vw,120px);align-items:center;
+  max-width:1240px;margin:0 auto;padding:clamp(88px,12vh,150px) var(--gut) clamp(96px,14vh,160px)}
+.ejemplos::before{content:"";position:absolute;z-index:-1;top:10%;right:-6%;width:760px;height:760px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(var(--oro-rgb),.10),rgba(var(--oro-rgb),.03) 46%,transparent 68%);filter:blur(30px)}
+.h-ejemplos{font-size:62.5px;line-height:1.1}
+.ejemplos .sub{margin:32px 0 0;max-width:26ch;font-size:clamp(19px,1.6vw,21px);line-height:1.5;color:var(--humo)}
+.ejemplos .cta{margin-top:40px}
+
+.post{position:relative;aspect-ratio:4/5;border-radius:18px;overflow:hidden;background:#000;
+  box-shadow:0 0 0 1px rgba(255,255,255,.08),0 50px 100px -40px rgba(0,0,0,.95),0 0 80px -20px rgba(var(--oro-rgb),.18)}
+.post__pista{display:flex;height:100%;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scroll-behavior:smooth;overscroll-behavior-x:contain;scrollbar-width:none;outline:none}
+.post__pista::-webkit-scrollbar{display:none}
+.post__pista img{flex:0 0 100%;width:100%;height:100%;object-fit:cover;scroll-snap-align:start;scroll-snap-stop:always;-webkit-user-drag:none;user-select:none}
+.post__pista:focus-visible{box-shadow:inset 0 0 0 2px var(--oro-b)}
+.post__pie{position:relative;display:flex;justify-content:center;align-items:center;margin-top:18px;height:24px}
+.post__cuenta{position:absolute;right:2px;font-size:14px;font-weight:700;letter-spacing:.05em;font-variant-numeric:tabular-nums;color:rgba(255,255,255,.7)}
+.post__flecha{position:absolute;top:50%;display:grid;place-items:center;width:44px;height:44px;margin-top:-22px;border-radius:50%;
+  background:rgba(250,248,244,.92);color:var(--tinta);box-shadow:0 6px 20px -6px rgba(0,0,0,.7);opacity:0;transition:opacity .3s var(--ease),transform .3s var(--ease)}
+.post__flecha svg{width:18px;height:18px}
+.post__flecha--ant{left:14px}.post__flecha--sig{right:14px}
+.post:hover .post__flecha:not([disabled]),.post__flecha:focus-visible{opacity:1}
+.post__flecha:hover{transform:scale(1.06)}
+.post__flecha[disabled]{opacity:0!important;pointer-events:none}
+.post__puntos{display:flex;justify-content:center;gap:6px;height:7px}
+.post__puntos i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.24);transition:background .3s,transform .3s}
+.post__puntos i.on{background:#fff;transform:scale(1.15)}
+.elige{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:28px}
+.elige button{position:relative;aspect-ratio:4/5;border-radius:9px;overflow:hidden;opacity:.5;box-shadow:0 0 0 1px rgba(255,255,255,.08);transition:opacity .35s var(--ease),transform .35s var(--ease),box-shadow .35s var(--ease)}
+.elige button img{width:100%;height:100%;object-fit:cover}
+.elige button:hover{opacity:.85}
+.elige button[aria-pressed="true"]{opacity:1;transform:translateY(-3px);box-shadow:0 0 0 2px var(--oro-b),0 10px 26px -10px rgba(var(--oro-rgb),.55)}
+.elige button:focus-visible{outline:2px solid var(--oro-b);outline-offset:3px}
 
 /* ---------- entrada ---------- */
 .sube{animation:sube 1.05s var(--ease) both}
 @keyframes sube{0%{opacity:0;transform:translate3d(0,24px,0);filter:blur(8px)}48%{filter:blur(0)}100%{opacity:1;transform:none;filter:none}}
-.d2{animation-delay:.12s}.d3{animation-delay:.28s}.d4{animation-delay:.46s}
+.d2{animation-delay:.14s}.d3{animation-delay:.3s}
 
 /* ---------- tamaños ---------- */
-@media (max-width:1100px){ .h1{font-size:46.875px} .h2{font-size:46.875px} }
+@media (max-width:1100px){ .h-galaxia,.h-ejemplos{font-size:46.875px} }
 @media (max-width:860px){
-  .s1{grid-template-columns:minmax(0,1fr);padding-top:64px}
-  .visor{justify-self:start;max-width:min(420px,100%)}
-  .h1{font-size:62.5px}
+  .ejemplos{grid-template-columns:minmax(0,1fr);gap:48px}
+  .h-ejemplos{font-size:62.5px}
 }
-@media (max-width:620px){
-  /* la línea más larga mide 226 puntos: el titular llena el ancho del móvil */
-  .h1{font-size:calc((100vw - 2 * var(--gut)) * .1345);line-height:1.12}
-  .sub{margin-top:28px}
-  .s1 .cta{margin-top:36px;width:100%;justify-content:space-between;padding-left:1.6rem}
-  .s2{height:clamp(700px,100svh,860px)}
-  .h2{font-size:calc((100vw - 2 * var(--gut)) * .12)}
-  .centro{padding:40px 20px;gap:32px;width:100%}
+@media (max-width:699px){
+  /* móvil: la telaraña entera arriba (la dibuja el script) y el mensaje abajo, sobre un degradado */
+  .galaxia{height:max(700px,100svh)}
+  .centro{top:auto;bottom:0;left:0;right:0;transform:none;padding:0 var(--gut) calc(40px + env(safe-area-inset-bottom,0px));width:100%}
+  .centro::before{inset:-72% 0 0;border-radius:0;background:linear-gradient(180deg,rgba(5,4,3,0),rgba(5,4,3,.9) 34%,var(--noche) 62%)}
+  .h-galaxia{font-size:calc((100vw - 2 * var(--gut)) * .12)}
+  .centro .sub{font-size:18px;margin-top:18px}
+  .centro .cta{margin-top:28px;width:100%;justify-content:space-between;padding-left:1.6rem}
+  .galaxia::after{display:none}
+  /* la línea más larga («Estos los ha hecho») mide 240 puntos: llena el ancho */
+  .h-ejemplos{font-size:calc((100vw - 2 * var(--gut)) * .126);line-height:1.12}
+  /* móvil: titular, los ejemplos y el botón al final (el de la portada ya queda arriba) */
+  .ejemplos{padding-top:72px;gap:0}
+  .ejemplos__texto{display:contents}
+  .ejemplos .sub{margin-top:22px;font-size:18px}
+  .ejemplos__visor{order:3;margin-top:36px}
+  .ejemplos .cta{order:4;width:100%;justify-content:space-between;padding-left:1.6rem;margin-top:36px}
+  .post{border-radius:14px}
+  .elige{gap:7px;margin-top:22px}
+  .elige button{border-radius:7px}
 }
+@media (hover:none){ .post__flecha{display:none} }
 @media (prefers-reduced-motion:reduce){
-  .sube,.gh,.flow,.hilos .h-pulso{animation:none!important}
-  .visor__pista,.cta,.cta__badge{transition:none!important}
+  .sube,.flow,.hilos .h-pulso{animation:none!important}
+  .post__pista{scroll-behavior:auto}
+  .cta,.cta__badge,.elige button,.post__flecha{transition:none!important}
 }
 @media (forced-colors:active){
   .cta{border:2px solid ButtonBorder;background:ButtonFace;color:ButtonText;forced-color-adjust:none}
@@ -141,26 +171,32 @@ main{overflow-x:clip}
 
 <div class="grano" aria-hidden="true"></div>
 <main>
-  <section class="s1" aria-labelledby="titular">
-    <div>
-      <h1 class="led h1 sube" id="titular">
-        <span class="ln glo">Carruseles de</span>
-        <span class="ln glo">Instagram hechos</span>
-        <span class="ln"><span class="gh"><span class="gh__box"><span class="gh__top"></span><span class="gh__label">por Claude</span></span></span></span>
-      </h1>
-      <p class="sub sube d2">Le das una idea y tus fotos. Te devuelve el carrusel terminado y listo para subir.</p>
-      <a class="cta sube d3" href="https://ig.me/m/danielfeyto" target="_blank" rel="noopener">Quiero la skill<span class="cta__badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9.5 7H17v7.5"/></svg></span></a>
-    </div>
-    <figure class="visor sube d4" id="visor" aria-label="Carruseles hechos con la skill">
-      <div class="visor__marco"><div class="visor__ventana"><div class="visor__pista" id="pista"></div></div></div>
-    </figure>
-  </section>
-
-  <section class="s2" aria-labelledby="galaxia-t">
+  <section class="galaxia" aria-labelledby="titular">
     <div class="red" id="red" aria-hidden="true"><svg class="hilos" id="hilos"></svg></div>
     <div class="centro">
-      <h2 class="led h2" id="galaxia-t"><span class="ln glo">Todos estos estilos.</span><span class="ln flow">Con tus fotos.</span></h2>
+      <h1 class="led h-galaxia sube" id="titular"><span class="ln glo">Todos estos estilos.</span><span class="ln flow">Con tus fotos.</span></h1>
+      <p class="sub sube d2">Una skill para Claude que convierte tus fotos en carruseles de Instagram listos para subir.</p>
+      <a class="cta sube d3" href="https://ig.me/m/danielfeyto" target="_blank" rel="noopener">Quiero la skill<span class="cta__badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9.5 7H17v7.5"/></svg></span></a>
+    </div>
+  </section>
+
+  <section class="ejemplos" aria-labelledby="ejemplos-t">
+    <div class="ejemplos__texto">
+      <h2 class="led h-ejemplos" id="ejemplos-t">
+        <span class="ln glo">Estos los ha hecho</span>
+        <span class="ln"><span class="gh"><span class="gh__box"><span class="gh__top"></span><span class="gh__label">Claude</span></span></span></span>
+      </h2>
+      <p class="sub">Con una idea y fotos de móvil.</p>
       <a class="cta" href="https://ig.me/m/danielfeyto" target="_blank" rel="noopener">Quiero la skill<span class="cta__badge" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M9.5 7H17v7.5"/></svg></span></a>
+    </div>
+    <div class="ejemplos__visor">
+      <div class="post" id="post">
+        <div class="post__pista" id="pista" tabindex="0" role="region" aria-roledescription="carrusel" aria-label="Slides del carrusel"></div>
+        <button class="post__flecha post__flecha--ant" id="ant" type="button" aria-label="Slide anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>
+        <button class="post__flecha post__flecha--sig" id="sig" type="button" aria-label="Slide siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button>
+      </div>
+      <div class="post__pie"><div class="post__puntos" id="puntos" aria-hidden="true"></div><span class="post__cuenta" id="cuenta" aria-live="polite"></span></div>
+      <div class="elige" id="elige" aria-label="Elige un carrusel"></div>
     </div>
   </section>
 </main>
@@ -170,94 +206,127 @@ const D = {"estilos":[{"id":"CTA-A-caja-comenta-prueba","corto":"CTA-A","rol":"c
 (function(){
   const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ---------- 1 · el carrusel que pasa ----------
-  const pista = document.getElementById('pista');
-  // empieza por el carrusel que dice lo mismo que la landing («este carrusel no lo ha hecho un diseñador»)
-  const primero = ['asi-hace-claude-mis-carruseles', 'los-que-meten-mas-en-anuncios', 'facturacion-no-es-una-metrica', 'mis-5-especialistas-de-ia', 'caso-daniel-del-toro', 'claude-no-es-un-dashboard'];
-  const rango = c => { const i = primero.indexOf(c.slug); return i < 0 ? 99 : i; };
-  const slides = [...D.carruseles].sort((a, b) => rango(a) - rango(b)).flatMap(c => c.slides.map(s => s.img));
-  let i = 0, reloj;
-  pista.innerHTML = slides.map((s, k) => `<img src="${s}" alt="" ${k > 1 ? 'loading="lazy"' : ''} decoding="async">`).join('');
-  const ir = n => { i = (n + slides.length) % slides.length; pista.style.transform = `translateX(${-i * 100}%)`; };
-  const arrancar = () => { clearInterval(reloj); if (!quieto) reloj = setInterval(() => ir(i + 1), 2300); };
-  const visor = document.getElementById('visor');
-  visor.addEventListener('click', () => { ir(i + 1); arrancar(); });
-  visor.addEventListener('mouseenter', () => clearInterval(reloj));
-  visor.addEventListener('mouseleave', arrancar);
-  arrancar();
+  // ================= 2 · el post que se desliza =================
+  const orden = ['asi-hace-claude-mis-carruseles', 'los-que-meten-mas-en-anuncios', 'facturacion-no-es-una-metrica', 'mis-5-especialistas-de-ia', 'caso-daniel-del-toro', 'claude-no-es-un-dashboard'];
+  const rango = c => { const i = orden.indexOf(c.slug); return i < 0 ? 99 : i; };
+  const cars = [...D.carruseles].sort((a, b) => rango(a) - rango(b));
+  const pista = document.getElementById('pista'), cuenta = document.getElementById('cuenta'), puntos = document.getElementById('puntos');
+  const ant = document.getElementById('ant'), sig = document.getElementById('sig'), elige = document.getElementById('elige');
+  let actual = 0, n = 0, idx = 0;
+  elige.innerHTML = cars.map((c, i) => `<button type="button" aria-pressed="${i === 0}" aria-label="${c.titulo.replace(/"/g, '&quot;')}"><img src="${c.portada}" alt="" loading="lazy" decoding="async"></button>`).join('');
+  function pintarPost(){
+    cuenta.textContent = `${idx + 1}/${n}`;
+    [...puntos.children].forEach((p, k) => p.classList.toggle('on', k === idx));
+    ant.disabled = idx === 0; sig.disabled = idx === n - 1;
+  }
+  function cargar(i){
+    actual = i; const c = cars[i]; n = c.slides.length; idx = 0;
+    pista.style.scrollBehavior = 'auto'; pista.scrollLeft = 0;
+    pista.innerHTML = c.slides.map((s, k) => `<img src="${s.img}" alt="${k ? `Slide ${k + 1}` : c.titulo.replace(/"/g, '&quot;')}" ${k > 1 ? 'loading="lazy"' : ''} decoding="async" draggable="false">`).join('');
+    pista.style.scrollBehavior = '';
+    puntos.innerHTML = c.slides.map(() => '<i></i>').join('');
+    [...elige.children].forEach((b, k) => b.setAttribute('aria-pressed', String(k === i)));
+    pintarPost();
+  }
+  const ir = k => pista.scrollTo({ left: Math.max(0, Math.min(n - 1, k)) * pista.clientWidth, behavior: quieto ? 'auto' : 'smooth' });
+  let raf = 0;
+  pista.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { const k = Math.round(pista.scrollLeft / pista.clientWidth); if (k !== idx) { idx = k; pintarPost(); } }); }, { passive: true });
+  ant.addEventListener('click', () => ir(idx - 1));
+  sig.addEventListener('click', () => ir(idx + 1));
+  pista.addEventListener('keydown', e => { if (e.key === 'ArrowRight') { e.preventDefault(); ir(idx + 1); } if (e.key === 'ArrowLeft') { e.preventDefault(); ir(idx - 1); } });
+  elige.addEventListener('click', e => { const b = e.target.closest('button'); if (b) cargar([...elige.children].indexOf(b)); });
+  // en escritorio también se arrastra con el ratón, como con el dedo
+  let arrastre = null;
+  pista.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') return; arrastre = { x: e.clientX, s: pista.scrollLeft }; pista.style.scrollSnapType = 'none'; pista.setPointerCapture(e.pointerId); });
+  pista.addEventListener('pointermove', e => { if (arrastre) pista.scrollLeft = arrastre.s - (e.clientX - arrastre.x); });
+  const soltar = e => { if (!arrastre) return; const d = e.clientX - arrastre.x; arrastre = null; pista.style.scrollSnapType = ''; ir(Math.abs(d) > 40 ? idx + (d < 0 ? 1 : -1) : idx); };
+  pista.addEventListener('pointerup', soltar); pista.addEventListener('pointercancel', soltar);
+  addEventListener('resize', () => { pista.style.scrollBehavior = 'auto'; pista.scrollLeft = idx * pista.clientWidth; pista.style.scrollBehavior = ''; });
+  cargar(0);
 
-  // ---------- 2 · la galaxia ----------
+  // ================= 1 · la galaxia =================
   // Cada brazo es una secuencia de referencia (su portada, la más cerca del centro). Los anillos unen la misma
   // posición de secuencias vecinas. El disco va inclinado: lo de delante, más grande y más claro.
-  const red = document.getElementById('red'), svg = document.getElementById('hilos'), s2 = red.parentElement;
-  const orden = ['H', 'A', 'B', 'C', 'D', 'E', 'F', 'I', 'J', 'K'].filter(f => D.brazos[f]);
-  const B = orden.length;
-  const nodos = [];
-  orden.forEach((f, b) => D.brazos[f].forEach((src, k) => {
+  const red = document.getElementById('red'), svg = document.getElementById('hilos'), sec = red.parentElement;
+  const fams = ['H', 'A', 'B', 'C', 'D', 'E', 'F', 'I', 'J', 'K'].filter(f => D.brazos[f]);
+  const B = fams.length, nodos = [];
+  fams.forEach((f, b) => D.brazos[f].forEach((src, k) => {
     const el = document.createElement('div'); el.className = 'nodo';
     el.innerHTML = `<img src="${src}" alt="" decoding="async">`;
     red.appendChild(el); nodos.push({ el, b, k });
   }));
   const NS = 'http://www.w3.org/2000/svg';
-  const seda = document.createElementNS(NS, 'path'); seda.setAttribute('class', 'h-seda');
-  const brazo = document.createElementNS(NS, 'path'); brazo.setAttribute('class', 'h-brazo');
-  const pulso = document.createElementNS(NS, 'path'); pulso.setAttribute('class', 'h-pulso'); pulso.setAttribute('pathLength', '1');
-  svg.append(seda, brazo, pulso);
+  const hilo = c => { const p = document.createElementNS(NS, 'path'); p.setAttribute('class', c); return p; };
+  const seda = hilo('h-seda'), brazo = hilo('h-brazo'), pulso = hilo('h-pulso'); pulso.setAttribute('pathLength', '1');
+  const nucleo = document.createElementNS(NS, 'circle'); nucleo.setAttribute('class', 'h-nucleo');
+  svg.append(seda, brazo, pulso, nucleo);
 
   let G = {};
   function medir(){
-    const w = s2.clientWidth, h = s2.clientHeight, movil = w < 700;
-    const h2 = s2.querySelector('.h2').getBoundingClientRect();
-    G = { w, h, cx: w / 2, cy: h / 2,
-      R0: Math.max(movil ? 150 : 250, h2.width / 2 + (movil ? 18 : 60)),   // el hueco del centro: ninguna slide pasa por encima del titular
-      paso: movil ? 78 : 104, giro: movil ? .12 : .085, incl: movil ? 1.02 : Math.min(.74, h / w * 1.16),
-      ancho: movil ? 62 : Math.round(Math.min(84, w / 17)) };
+    const w = sec.clientWidth, h = sec.clientHeight, movil = w < 700;
+    if (movil) {
+      // la telaraña entera en la mitad de arriba, con su núcleo dorado; el texto va debajo
+      const texto = sec.querySelector('.centro').getBoundingClientRect();
+      const alto = Math.max(300, h - texto.height + 40);
+      G = { w, h, movil, cx: w / 2, cy: Math.min(alto * .5, h * .36), R0: 26, pr: 64, paso: Math.max(44, Math.min(58, w / 7.6)),
+        giro: .16, incl: .86, ancho: Math.round(Math.max(48, Math.min(60, w / 7))), maxK: 6 };
+    } else {
+      const t = sec.querySelector('.h-galaxia').getBoundingClientRect();
+      const R0 = Math.max(250, t.width / 2 + 60);   // el hueco del centro: ninguna slide pasa por encima del titular
+      G = { w, h, movil, cx: w / 2, cy: h / 2, R0, pr: 46, paso: 104, giro: .085, incl: Math.min(.74, h / w * 1.16),
+        ancho: Math.round(Math.min(84, w / 17)), maxK: 99 };
+    }
+    nodos.forEach(n => { n.el.hidden = n.k >= G.maxK; n.el.style.width = G.ancho + 'px'; n.el.style.height = G.ancho * 1.25 + 'px'; });
     svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    nucleo.setAttribute('r', G.movil ? 4.5 : 0);
   }
   const pos = (b, k, rot) => {
-    const th = b / B * Math.PI * 2 + k * G.giro + rot, r = G.R0 + 46 + k * G.paso;
+    const th = b / B * Math.PI * 2 + k * G.giro + rot, r = G.R0 + G.pr + k * G.paso;
     return { x: G.cx + r * Math.cos(th), y: G.cy + r * Math.sin(th) * G.incl, fondo: (Math.sin(th) + 1) / 2, th, r };
   };
-  const f1 = n => n.toFixed(1);
+  const f1 = v => v.toFixed(1);
   const VEL = (Math.PI * 2) / 170;
   let rot = 0, vel = quieto ? 0 : VEL, velObj = vel, activo = -1, fijo = -1;
   function pintar(){
     const P = {};
     nodos.forEach(n => {
+      if (n.k >= G.maxK) return;
       const p = pos(n.b, n.k, rot); P[n.b + ':' + n.k] = p;
-      const s = (.72 + .4 * p.fondo) * (1 + n.k * .06);   // delante, más grande; y cada anillo hacia fuera crece un poco: la galaxia se abre
-      n.el.style.width = G.ancho + 'px'; n.el.style.height = G.ancho * 1.25 + 'px';
+      const s = (.72 + .4 * p.fondo) * (1 + n.k * .06);   // delante, más grande; cada anillo hacia fuera crece un poco
       n.el.style.transform = `translate3d(${f1(p.x - G.ancho / 2)}px,${f1(p.y - G.ancho * .625)}px,0) scale(${s.toFixed(3)})`;
       n.el.style.zIndex = 10 + Math.round(p.y);
       const on = n.b === activo;
       n.el.style.opacity = (on ? 1 : .42 + .45 * p.fondo).toFixed(3);
       n.el.classList.toggle('on', on);
     });
-    // hilos: cada brazo sale del cubo del centro y pasa por sus slides; los anillos unen vecinos con la comba hacia dentro
     let d = '', dB = '';
     for (let b = 0; b < B; b++) {
-      const n = D.brazos[orden[b]].length;
-      const c0 = pos(b, -0.9, rot);
+      const n = Math.min(G.maxK, D.brazos[fams[b]].length);
+      const c0 = G.movil ? { x: G.cx, y: G.cy } : pos(b, -0.9, rot);
       let tramo = `M${f1(c0.x)} ${f1(c0.y)}`;
       for (let k = 0; k < n; k++) { const p = P[b + ':' + k]; tramo += `L${f1(p.x)} ${f1(p.y)}`; }
       const fin = pos(b, n + .6, rot); tramo += `L${f1(fin.x)} ${f1(fin.y)}`;
       if (b === activo) dB = tramo; else d += tramo;
-      const m = D.brazos[orden[(b + 1) % B]].length;
+      const m = Math.min(G.maxK, D.brazos[fams[(b + 1) % B]].length);
       for (let k = 0; k < Math.min(n, m); k++) {
         const a = P[b + ':' + k], c = P[((b + 1) % B) + ':' + k];
         const th = (a.th + c.th + (b === B - 1 ? Math.PI * 2 : 0)) / 2, r = (a.r + c.r) / 2 * .9;
         d += `M${f1(a.x)} ${f1(a.y)}Q${f1(G.cx + r * Math.cos(th))} ${f1(G.cy + r * Math.sin(th) * G.incl)} ${f1(c.x)} ${f1(c.y)}`;
       }
     }
-    let cubo = ''; for (let a = 0; a <= 72; a++) { const th = a / 72 * Math.PI * 2, r = G.R0 - 8; cubo += `${a ? 'L' : 'M'}${f1(G.cx + r * Math.cos(th))} ${f1(G.cy + r * Math.sin(th) * G.incl)}`; }
+    let cubo = ''; const rc = G.movil ? G.R0 : G.R0 - 8;
+    for (let a = 0; a <= 72; a++) { const th = a / 72 * Math.PI * 2; cubo += `${a ? 'L' : 'M'}${f1(G.cx + rc * Math.cos(th))} ${f1(G.cy + rc * Math.sin(th) * G.incl)}`; }
     seda.setAttribute('d', d + cubo); brazo.setAttribute('d', dB); pulso.setAttribute('d', dB);
+    nucleo.setAttribute('cx', f1(G.cx)); nucleo.setAttribute('cy', f1(G.cy));
   }
   // cada pocos segundos se enciende una secuencia: el hilo dorado la recorre de la portada al final
   function encender(b){ activo = b; pulso.style.animation = 'none'; pulso.getBoundingClientRect(); pulso.style.animation = ''; }
   let ciclo, siguiente = 0;
   const girarBrazos = () => { clearInterval(ciclo); if (!quieto) ciclo = setInterval(() => { if (fijo < 0) encender(siguiente++ % B); }, 4200); };
-  red.addEventListener('pointerover', e => { const el = e.target.closest('.nodo'); if (!el) return; const n = nodos.find(x => x.el === el); fijo = n.b; velObj = 0; if (activo !== n.b) encender(n.b); });
-  red.addEventListener('pointerout', e => { const el = e.target.closest('.nodo'); if (!el || (e.relatedTarget && el.contains(e.relatedTarget))) return; fijo = -1; velObj = quieto ? 0 : VEL; });
+  const tocar = el => { const n = nodos.find(x => x.el === el); if (!n) return; fijo = n.b; velObj = 0; if (activo !== n.b) encender(n.b); };
+  red.addEventListener('pointerover', e => { const el = e.target.closest('.nodo'); if (el) tocar(el); });
+  red.addEventListener('pointerout', e => { const el = e.target.closest('.nodo'); if (!el || (e.relatedTarget && el.contains(e.relatedTarget))) return; if (e.pointerType === 'mouse') { fijo = -1; velObj = quieto ? 0 : VEL; } });
+  sec.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse' && !e.target.closest('.nodo')) { fijo = -1; velObj = quieto ? 0 : VEL; } });
 
   let visible = true, t0 = performance.now();
   function bucle(t){
@@ -266,8 +335,8 @@ const D = {"estilos":[{"id":"CTA-A-caja-comenta-prueba","corto":"CTA-A","rol":"c
     pintar();
     if (visible) requestAnimationFrame(bucle);
   }
-  new IntersectionObserver(es => { const v = es[0].isIntersecting; if (v && !visible) { visible = true; t0 = performance.now(); if (!quieto) requestAnimationFrame(bucle); } else if (!v) visible = false; }).observe(s2);
-  addEventListener('resize', () => { medir(); pintar(); });
+  new IntersectionObserver(es => { const v = es[0].isIntersecting; if (v && !visible) { visible = true; t0 = performance.now(); if (!quieto) requestAnimationFrame(bucle); } else if (!v) visible = false; }).observe(sec);
+  let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { medir(); pintar(); }, 80); });
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => { medir(); pintar(); });
   medir(); pintar(); encender(0); siguiente = 1; girarBrazos();
   if (!quieto) requestAnimationFrame(bucle);
