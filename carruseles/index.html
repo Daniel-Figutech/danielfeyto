@@ -86,7 +86,15 @@ button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:poin
 .nodo img{width:100%;height:100%;object-fit:cover}
 .nodo.on{box-shadow:0 0 0 1.5px rgba(var(--oro-rgb),.9),0 0 26px rgba(var(--oro-rgb),.28),0 18px 40px -16px rgba(0,0,0,.9)}
 .nodo[hidden]{display:none}
-.centro{position:absolute;left:50%;top:50%;z-index:4000;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;text-align:center;
+.vitrina{position:absolute;left:0;top:0;z-index:3500;margin:0;width:300px;pointer-events:none}
+.vitrina::before{content:"";position:absolute;inset:-16% -34% 18%;z-index:-1;border-radius:50%;background:radial-gradient(closest-side,rgba(var(--oro-rgb),.24),rgba(var(--oro-rgb),.06) 55%,transparent 75%);filter:blur(28px)}
+.vitrina__flota{display:block;transform:perspective(1100px) rotateX(8deg);transform-origin:50% 100%;animation:flota 7s ease-in-out infinite}
+@keyframes flota{0%,100%{transform:perspective(1100px) rotateX(8deg) translateY(0)}50%{transform:perspective(1100px) rotateX(6deg) translateY(-8px)}}
+/* la portada se funde hacia el centro: nítida arriba, cada vez más oscura hasta desaparecer detrás del titular */
+.vitrina img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:16px;
+  -webkit-mask-image:linear-gradient(180deg,#000 0%,#000 36%,rgba(0,0,0,.62) 54%,rgba(0,0,0,.24) 70%,transparent 88%),radial-gradient(120% 100% at 50% 0%,#000 62%,transparent 100%);
+  -webkit-mask-composite:source-in;mask-image:linear-gradient(180deg,#000 0%,#000 36%,rgba(0,0,0,.62) 54%,rgba(0,0,0,.24) 70%,transparent 88%),radial-gradient(120% 100% at 50% 0%,#000 62%,transparent 100%);mask-composite:intersect}
+.centro{position:absolute;left:50%;top:56%;z-index:4000;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;text-align:center;
   padding:56px 72px;pointer-events:none}
 .centro::before{content:"";position:absolute;inset:-30% -18%;z-index:-1;border-radius:50%;background:radial-gradient(closest-side,rgba(5,4,3,.94),rgba(5,4,3,.8) 55%,rgba(5,4,3,0))}
 .centro .cta{pointer-events:auto;margin-top:40px}
@@ -203,6 +211,9 @@ html.ws-open,html.ws-open body{overflow:hidden}
 @media (max-width:699px){
   /* móvil: la telaraña entera arriba (la dibuja el script) y el mensaje abajo, sobre un degradado */
   .galaxia{height:max(700px,100svh)}
+  .vitrina__flota{transform:none;animation:flotaM 7s ease-in-out infinite}
+  @keyframes flotaM{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+  .vitrina::before{inset:-30% -40% 0}
   .centro{top:auto;bottom:0;left:0;right:0;transform:none;padding:0 var(--gut) calc(40px + env(safe-area-inset-bottom,0px));width:100%}
   .centro::before{inset:-72% 0 0;border-radius:0;background:linear-gradient(180deg,rgba(5,4,3,0),rgba(5,4,3,.9) 34%,var(--noche) 62%)}
   .h-galaxia{font-size:calc((100vw - 2 * var(--gut)) * .1345);line-height:1.12}
@@ -223,7 +234,7 @@ html.ws-open,html.ws-open body{overflow:hidden}
 }
 @media (hover:none){ .post__flecha{display:none} }
 @media (prefers-reduced-motion:reduce){
-  .sube,.flow,.hilos .h-pulso{animation:none!important}
+  .sube,.flow,.hilos .h-pulso,.vitrina__flota{animation:none!important}
   .post__pista{scroll-behavior:auto}
   .cta,.cta__badge,.elige button,.post__flecha{transition:none!important}
 }
@@ -236,6 +247,7 @@ html.ws-open,html.ws-open body{overflow:hidden}
 <main>
   <section class="galaxia" aria-labelledby="titular">
     <div class="red" id="red" aria-hidden="true"><svg class="hilos" id="hilos"></svg></div>
+    <figure class="vitrina" id="vitrina" aria-hidden="true"><span class="vitrina__flota"><img src="img/s-caso-daniel-del-toro-01.jpg" alt="" decoding="async" fetchpriority="high"></span></figure>
     <div class="centro">
       <h1 class="led h-galaxia sube" id="titular">
         <span class="ln glo">Carruseles de</span>
@@ -442,8 +454,22 @@ const D = {"estilos":[{"id":"CTA-A-caja-comenta-prueba","corto":"CTA-A","rol":"c
     } else {
       const t = sec.querySelector('.h-galaxia').getBoundingClientRect();
       const R0 = Math.max(250, t.width / 2 + 60);   // el hueco del centro: ninguna slide pasa por encima del titular
-      G = { w, h, movil, cx: w / 2, cy: h / 2, R0, pr: 46, paso: 104, giro: .085, incl: Math.min(.74, h / w * 1.16),
+      G = { w, h, movil, cx: w / 2, cy: h * .56, R0, pr: 46, paso: 104, giro: .085, incl: Math.min(.74, h / w * 1.16),
         ancho: Math.round(Math.min(84, w / 17)), maxK: 99 };
+    }
+    // la vitrina: en escritorio asoma por encima del titular (su tercio de abajo, ya fundido, queda detrás);
+    // en el móvil va en el centro de la telaraña, como la pieza que la sostiene
+    const vit = document.getElementById('vitrina');
+    if (vit) {
+      if (movil) {
+        const vw = Math.round(Math.min(176, w * .44)), vh = vw * 1.25;
+        vit.style.width = vw + 'px'; vit.style.left = (G.cx - vw / 2) + 'px'; vit.style.top = Math.max(12, G.cy - vh * .46) + 'px';
+      } else {
+        const sr = sec.getBoundingClientRect(), t1 = sec.querySelector('.h-galaxia').getBoundingClientRect();
+        let vw = Math.round(Math.max(220, Math.min(300, w * .21))), vh = vw * 1.25, top = (t1.top - sr.top) + vh * .3 - vh;
+        if (top < 24) { vh = vh + top - 24; vw = Math.round(vh / 1.25); top = (t1.top - sr.top) + vh * .3 - vh; }
+        vit.style.width = vw + 'px'; vit.style.left = (G.cx - vw / 2) + 'px'; vit.style.top = top + 'px';
+      }
     }
     nodos.forEach(n => { n.el.hidden = n.k >= G.maxK; n.el.style.width = G.ancho + 'px'; n.el.style.height = G.ancho * 1.25 + 'px'; });
     svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
@@ -510,6 +536,7 @@ const D = {"estilos":[{"id":"CTA-A-caja-comenta-prueba","corto":"CTA-A","rol":"c
   let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { medir(); pintar(); }, 80); });
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => { medir(); pintar(); });
   medir(); pintar(); encender(0); siguiente = 1; girarBrazos();
+  setTimeout(() => { medir(); pintar(); }, 1300);   // cuando el titular termina de entrar, la vitrina se recoloca sobre su sitio final
   if (!quieto) requestAnimationFrame(bucle);
   document.addEventListener('animationend', e => { if (e.animationName === 'sube') e.target.classList.remove('sube'); }, true);
 })();
