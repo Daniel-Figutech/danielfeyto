@@ -4,11 +4,21 @@ Hero de optin, una sola pantalla, sin header. Estático: `index.html` autoconten
 
 ## Despliegue
 
-Cloudflare Pages conectado a este repo.
+Cloudflare Workers con Static Assets conectado a este repo (worker `danielfeyto`).
 
-- Build command: *(ninguno)*
-- Build output directory: `/` (raíz)
+- Comando de despliegue de la integración Git: `npx wrangler deploy`.
+- `wrangler.jsonc` ejecuta `scripts/build-assets.mjs` y publica solo `_site/`.
+- Código del Worker: `src/worker.js`; sirve el registro y la descarga protegida de carruseles.
 - Cada `git push` a `main` redespliega.
+
+### IA de carruseles con opt-in
+
+`/carruseles/` conserva su galería y abre el formulario propio. El servidor guarda el registro y
+su consentimiento en D1 antes de emitir una sesión de descarga de 24 horas. El ZIP vive en KV
+privado y `/carruseles/descargar` comprueba la sesión en cada solicitud. Compartir esa URL no
+da acceso a otro navegador. Los registros de esta página **no se sincronizan con GHL**.
+
+Operación, exportación y actualización: [CARRUSELES.md](CARRUSELES.md).
 
 ## Qué hay que tocar antes de dar tráfico
 

@@ -1,0 +1,25 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "danielfeyto",
+  "account_id": "c32c24707657d885fda2a2257c025c9c",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-09-21",
+  "workers_dev": true,
+  "build": { "command": "node scripts/build-assets.mjs", "watch_dir": ["src", "carruseles", "fonts"] },
+  "assets": {
+    "directory": "_site",
+    "binding": "ASSETS",
+    "run_worker_first": ["/carruseles/registro*", "/carruseles/descargar*", "/carruseles/acceso*"]
+  },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "danielfeyto-carruseles",
+    "database_id": "2a90bb54-e5f8-4bfc-9601-20d12dd3cf5f"
+  }],
+  "kv_namespaces": [{
+    "binding": "DOWNLOADS",
+    "id": "1cde0ad71f5945649bfaebbf95fc28c7"
+  }],
+  "triggers": { "crons": ["17 5 * * *"] },
+  "observability": { "enabled": true }
+}

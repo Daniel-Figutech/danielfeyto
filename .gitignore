@@ -1,1 +1,8 @@
 .DS_Store
+node_modules/
+.wrangler/
+.dev.vars*
+.env*
+_private/
+_site/
+*.zip
