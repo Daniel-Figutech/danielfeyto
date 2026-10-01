@@ -9,6 +9,7 @@ function environment() {
   const sqlite = new DatabaseSync(':memory:');
   sqlite.exec('PRAGMA foreign_keys = ON');
   sqlite.exec(readFileSync(new URL('../migrations/0001_carruseles.sql', import.meta.url), 'utf8'));
+  sqlite.exec(readFileSync(new URL('../migrations/0002_admin.sql', import.meta.url), 'utf8'));
   const db = {
     prepare(sql) {
       return {

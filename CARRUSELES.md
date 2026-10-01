@@ -16,6 +16,31 @@ Una persona que ya haya descargado el archivo puede compartir su copia.
 
 ## Datos privados
 
+### Panel para el día a día
+
+https://danielfeyto.com/carruseles/panel/ permite consultar contactos, buscar, abrir sus fichas
+y descargar un CSV con todos los resultados (no solo la página visible). Es de consulta; no envía
+mensajes ni modifica leads. La sesión se recuerda 30 días; Cerrar sesión revoca el acceso de ese navegador.
+
+La clave es aleatoria de 256 bits. Su SHA-256 se configura en el secreto de Cloudflare
+`ADMIN_KEY_HASH`; nunca en Git, el HTML o JavaScript. El enlace privado usa `#key=...`: el fragmento
+no viaja al servidor y la interfaz lo elimina al abrirlo, intercambiándolo mediante POST por una
+cookie HttpOnly/Secure/SameSite=Strict. La cookie pública de descarga no sirve para el panel.
+No usar `?key=...`, parámetros de consulta, analítica ni servicios externos en esta página.
+
+La copia local del acceso está en `_private/panel-access.json`, con permisos 0600, excluida de Git
+y de los archivos públicos. Para revocar la clave, generar una nueva de 32 bytes criptográficos,
+guardar su hash como `ADMIN_KEY_HASH` usando `wrangler secret put` por entrada estándar y entregar
+el nuevo enlace por un canal privado. Cambiar el hash también invalida todas las sesiones anteriores.
+La tarea diaria limpia las sesiones caducadas de `carrusel_admin_sessions`.
+
+Los endpoints `/carruseles/panel/api/leads` y `/export` comprueban la sesión en cada petición.
+La exportación neutraliza fórmulas de hoja de cálculo. El panel y su API prohíben caché,
+indexación y uso dentro de iframes; el acceso por clave tiene un límite de 10 intentos por 15 minutos.
+
+Para desarrollo local, `.dev.vars` debe definir `ADMIN_KEY_HASH` con el SHA-256 de una clave
+de prueba distinta de la clave real. El archivo está excluido de Git.
+
 Cloudflare D1: `danielfeyto-carruseles`. La tabla `carrusel_leads` contiene los registros, su fecha UTC
 y la versión del consentimiento. Sesiones y límites viven en tablas separadas. La tarea diaria
 de las 05:17 UTC elimina sesiones caducadas y registros con 180 días de antigüedad.

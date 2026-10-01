@@ -1,3 +1,5 @@
+import admin from './admin.js';
+
 const COOKIE = '__Secure-carruseles';
 const SESSION_SECONDS = 86400;
 const BODY_LIMIT = 16384;
@@ -141,6 +143,7 @@ export default {
     const path = new URL(request.url).pathname.replace(/\/+$/, '');
     const method = request.method;
     try {
+      if (path === '/carruseles/panel' || path.startsWith('/carruseles/panel/')) return await admin.fetch(request, env);
       if (path === '/carruseles/registro') {
         if (method !== 'POST') return json({ error: 'Método no permitido.' }, 405, { Allow: 'POST' });
         return await register(request, env);
@@ -161,6 +164,7 @@ export default {
       env.DB.prepare('DELETE FROM carrusel_sessions WHERE expires_at <= ?').bind(timestamp),
       env.DB.prepare('DELETE FROM carrusel_rate_limits WHERE expires_at <= ?').bind(timestamp),
       env.DB.prepare('DELETE FROM carrusel_leads WHERE created_at <= ?').bind(timestamp - 180 * 86400),
+      env.DB.prepare('DELETE FROM carrusel_admin_sessions WHERE expires_at <= ?').bind(timestamp),
     ]);
   },
 };

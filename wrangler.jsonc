@@ -9,7 +9,7 @@
   "assets": {
     "directory": "_site",
     "binding": "ASSETS",
-    "run_worker_first": ["/carruseles/registro*", "/carruseles/descargar*", "/carruseles/acceso*"]
+    "run_worker_first": ["/carruseles/registro*", "/carruseles/descargar*", "/carruseles/acceso*", "/carruseles/panel*"]
   },
   "d1_databases": [{
     "binding": "DB",

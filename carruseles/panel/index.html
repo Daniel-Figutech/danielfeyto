@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="referrer" content="no-referrer">
+  <title>Contactos de carruseles · Daniel Feyto</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/carruseles/panel/panel.css">
+  <script src="/carruseles/panel/panel.js" defer></script>
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="/carruseles/"><img src="/logo.svg" alt="" width="30" height="30">DANIEL FEYTO</a><span class="private">Panel privado</span></header>
+  <main>
+    <p id="boot" role="status">Comprobando acceso…</p>
+    <section id="login" class="login" hidden aria-labelledby="login-title">
+      <p class="eyebrow">TU RECURSO. TUS CONTACTOS.</p>
+      <h1 id="login-title">Todo empieza con<br>una conversación.</h1>
+      <p class="intro">Aquí tienes a quienes han pedido tu IA de carruseles. Entra con tu clave privada.</p>
+      <form id="login-form">
+        <label for="key">Clave de acceso</label>
+        <input id="key" name="key" type="password" autocomplete="current-password" required maxlength="80" spellcheck="false" autocapitalize="none">
+        <button class="primary" type="submit" id="login-button">Entrar al panel <span aria-hidden="true">↗</span></button>
+      </form>
+      <p id="login-error" class="error" role="alert" hidden></p>
+      <p class="hint">El acceso se recuerda durante 30 días en este navegador. Guarda tu enlace privado para volver cuando quieras.</p>
+    </section>
+    <section id="dashboard" hidden aria-labelledby="panel-title">
+      <div class="heading"><div><p class="eyebrow">IA CARRUSELES AESTHETIC</p><h1 id="panel-title" tabindex="-1">Tus contactos.</h1><p class="intro">Las personas que han solicitado la descarga, en un solo lugar.</p></div><button id="logout" class="quiet">Cerrar sesión</button></div>
+      <dl class="stats"><div><dt>Registros totales</dt><dd id="total">—</dd></div><div><dt>Últimas 24 horas</dt><dd id="day">—</dd></div><div><dt>Últimos 7 días</dt><dd id="week">—</dd></div></dl>
+      <div class="toolbar"><form id="search-form"><label for="search">Buscar contactos</label><div class="search"><input id="search" type="search" maxlength="160" placeholder="Nombre, email, WhatsApp o negocio…" autocomplete="off"><button type="submit" aria-label="Buscar">Buscar</button></div></form><div class="actions"><button id="refresh">Actualizar</button><button id="export" class="primary">Descargar CSV <span aria-hidden="true">↓</span></button></div></div>
+      <div class="list-meta"><p id="results" role="status" aria-live="polite"></p><span id="updated"></span></div>
+      <p id="panel-error" class="error" role="alert" hidden></p>
+      <div id="list" aria-busy="false"><div class="table-wrap" id="table-wrap"><table><caption class="sr-only">Contactos registrados para descargar la IA de carruseles</caption><thead><tr><th scope="col">Contacto</th><th scope="col">WhatsApp</th><th scope="col">Facturación mensual</th><th scope="col">Registro</th><th scope="col"><span class="sr-only">Ficha del contacto</span></th></tr></thead><tbody id="rows"></tbody></table></div>
+      <div id="empty" class="empty" hidden><span aria-hidden="true">↗</span><h2 id="empty-title">Tu próximo contacto empieza aquí.</h2><p id="empty-text">Cuando alguien complete el formulario de carruseles, aparecerá en esta lista.</p><a href="/carruseles/" target="_blank" rel="noopener noreferrer">Ver página de descarga ↗</a></div></div>
+      <nav class="pagination" aria-label="Páginas de contactos"><button id="previous" disabled>← Anterior</button><span id="page">Página 1</span><button id="next" disabled>Siguiente →</button></nav>
+      <p class="footnote">El CSV incluye todos los resultados de tu búsqueda. Los registros se conservan durante 180 días.</p>
+    </section>
+    <noscript><p>Activa JavaScript para entrar al panel privado.</p></noscript>
+  </main>
+  <dialog id="details" aria-labelledby="details-name"><div class="dialog-head"><p class="eyebrow">FICHA DEL CONTACTO</p><button id="close-details" aria-label="Cerrar ficha">✕</button></div><h2 id="details-name"></h2><p id="details-date" class="hint"></p><div id="contact-links" class="contact-links"></div><dl id="answers" class="answers"></dl></dialog>
+</body>
+</html>
