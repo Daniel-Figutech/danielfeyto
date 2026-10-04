@@ -77,7 +77,9 @@ node scripts/upload-download.mjs /ruta/IA-Carruseles-Aesthetic.zip --remote
 
 No colocar ZIP, claves ni exportaciones dentro de `carruseles/` o `fonts/`: son directorios públicos.
 La generación de `_site/` usa una lista explícita de entradas públicas y excluye los archivos de trabajo,
-dependencias, base local y código del servidor. El ZIP original se conserva fuera de este repositorio.
+dependencias, base local y código del servidor. El ZIP original se conserva fuera de este repositorio,
+en `/Users/danifcn/Daniel Feyto PB/media/lead-magnets/IA-Carruseles-Aesthetic-2026-10-01/IA-Carruseles-Aesthetic.zip`
+(antes en `mac-vault/output/`; la versión completa, en `IA-Carruseles-Aesthetic-Completa-2026-10-01/` de esa misma carpeta).
 
 ## Desarrollo y despliegue
 
