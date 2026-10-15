@@ -33,11 +33,26 @@ function environment() {
   return {
     sqlite, files,
     DB: db,
-    DOWNLOADS: { async get(key, type) {
-      const value = files.get(key);
-      if (value === undefined) return null;
-      return type === 'json' ? value : new Response(value).body;
-    } },
+    DOWNLOADS: {
+      open: 0, maxOpen: 0,
+      async get(key, type) {
+        const value = files.get(key);
+        if (value === undefined) return null;
+        if (type === 'json') return value;
+        // Counts part bodies held open at once, as the Workers connection limit does.
+        const kv = this, bytes = new TextEncoder().encode(value);
+        let sent = false, closed = false;
+        const close = () => { if (!closed) { closed = true; kv.open--; } };
+        kv.open++; kv.maxOpen = Math.max(kv.maxOpen, kv.open);
+        return new ReadableStream({
+          pull(controller) { if (sent) { close(); controller.close(); } else { sent = true; controller.enqueue(bytes); } },
+          cancel() { close(); },
+        });
+      },
+      async list({ prefix = '' } = {}) {
+        return { keys: [...files.keys()].filter(name => name.startsWith(prefix)).map(name => ({ name })), list_complete: true };
+      },
+    },
     ASSETS: { async fetch() { return new Response('Public page'); } },
   };
 }
@@ -123,6 +138,19 @@ test('expired sessions and deleted leads cannot download', async () => {
     env.sqlite.exec(sql);
     assert.equal((await download(env, cookieFrom(response))).status, 303);
   }
+});
+
+test('an archive of many parts streams whole, reading one part at a time', async () => {
+  const env = environment();
+  const parts = Array.from({ length: 8 }, (_, i) => `archives/many/${String(i).padStart(2, '0')}`);
+  parts.forEach((key, i) => env.files.set(key, `parte${i};`));
+  const expected = parts.map((_, i) => `parte${i};`).join('');
+  env.files.set('manifest.json', { filename: 'IA-Carruseles-Aesthetic.zip', size: expected.length, sha256: 'many', parts });
+  const file = await download(env, cookieFrom(await register(env)));
+  assert.equal(file.status, 200);
+  assert.equal(await file.text(), expected);
+  assert.equal(env.DOWNLOADS.maxOpen, 1);
+  assert.equal(env.DOWNLOADS.open, 0);
 });
 
 test('a missing archive gives a retryable error instead of a partial download', async () => {

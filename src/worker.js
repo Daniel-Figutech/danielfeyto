@@ -90,26 +90,44 @@ async function hasAccess(request, env) {
     JOIN carrusel_leads l ON l.id = s.lead_id WHERE s.token_hash = ? AND s.expires_at > ?`).bind(await hash(token), now()).first());
 }
 
-function joinStreams(streams) {
-  let index = 0;
-  let reader = streams[0].getReader();
+// Every part exists before the response starts, so a missing one is a retryable 503, not a cut ZIP.
+// list() reads names only; no part body is opened here.
+async function hasEveryPart(env, parts) {
+  const found = new Set();
+  for (const prefix of new Set(parts.map(key => key.slice(0, key.lastIndexOf('/') + 1)))) {
+    let cursor;
+    do {
+      const page = await env.DOWNLOADS.list({ prefix, cursor });
+      for (const { name } of page.keys) found.add(name);
+      cursor = page.list_complete ? undefined : page.cursor;
+    } while (cursor);
+  }
+  return parts.every(key => found.has(key));
+}
+
+// One KV connection at a time. A Worker may hold six open connections; with more pending and none being
+// read, the runtime cancels the oldest to break the deadlock, which would cut an archive of more than six parts.
+function joinParts(env, parts) {
+  let index = 0, reader = null;
   return new ReadableStream({
     async pull(controller) {
       try {
-        while (index < streams.length) {
+        while (index < parts.length) {
+          if (!reader) {
+            const stream = await env.DOWNLOADS.get(parts[index], 'stream');
+            if (!stream) throw new Error('Archive incomplete');
+            reader = stream.getReader();
+          }
           const { done, value } = await reader.read();
           if (!done) { controller.enqueue(value); return; }
           reader.releaseLock();
+          reader = null;
           index++;
-          if (index < streams.length) reader = streams[index].getReader();
         }
         controller.close();
       } catch (error) { controller.error(error); }
     },
-    async cancel(reason) {
-      if (index < streams.length) await reader.cancel(reason);
-      await Promise.all(streams.slice(index + 1).map(s => s.cancel(reason)));
-    },
+    async cancel(reason) { if (reader) await reader.cancel(reason); },
   });
 }
 
@@ -124,12 +142,8 @@ async function download(request, env) {
   };
   if (request.method === 'HEAD') return new Response(null, { headers });
   // KV parts have no public URL. Only this authenticated route can read them.
-  const streams = await Promise.all(manifest.parts.map(key => env.DOWNLOADS.get(key, 'stream')));
-  if (streams.some(stream => !stream)) {
-    await Promise.all(streams.filter(Boolean).map(stream => stream.cancel()));
-    throw new Error('Archive incomplete');
-  }
-  let body = joinStreams(streams);
+  if (!await hasEveryPart(env, manifest.parts)) throw new Error('Archive incomplete');
+  let body = joinParts(env, manifest.parts);
   if (typeof FixedLengthStream !== 'undefined') {
     const fixed = new FixedLengthStream(manifest.size);
     body.pipeTo(fixed.writable).catch(() => {}); // An aborted transfer already errors the readable side.
