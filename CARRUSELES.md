@@ -72,9 +72,11 @@ se conserva fuera del repositorio para poder volver a ella.
 
 KV `DOWNLOADS` almacena partes de hasta 20 MiB porque cada valor de KV tiene un límite de 25 MiB (la entrega del
 14 de octubre son 8). El Worker comprueba con `list()` que existen todas antes de responder y las transmite por
-streaming como un único ZIP, abriendo una parte cada vez: un Worker solo mantiene 6 conexiones simultáneas y, si
-espera con más pendientes, Cloudflare cancela la más antigua, lo que cortaría un ZIP de más de 6 partes. No hay URL
-pública de KV. Los identificadores de las partes incluyen su hash y el manifiesto se cambia al terminar la subida.
+streaming como un único ZIP, una parte cada vez: un Worker solo mantiene 6 conexiones simultáneas y, si espera con
+más pendientes, Cloudflare cancela la más antigua, lo que cortaría un ZIP de más de 6 partes. Cada parte se canaliza
+con `pipeTo` del cuerpo de KV al `FixedLengthStream` de la respuesta, sin JavaScript en medio: con un bucle de
+lectura en JavaScript la descarga costaba unos 17 ms de CPU por MB y la de 147 MB se cortaba por `exceededCpu`;
+canalizada gasta unos 11 ms en total. No hay URL pública de KV. Los identificadores de las partes incluyen su hash y el manifiesto se cambia al terminar la subida.
 La propagación de KV puede hacer que una actualización tarde en llegar a todas las ubicaciones.
 
 ```sh
