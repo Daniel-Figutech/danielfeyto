@@ -61,14 +61,20 @@ No exportar la tabla de sesiones ni añadir datos personales al repositorio púb
 
 ## ZIP privado
 
-Archivo: `IA-Carruseles-Aesthetic.zip`, 86.790.109 bytes, 71 estilos y documentación de instalación.
-SHA-256 de la entrega del 1 de octubre de 2026:
+Archivo: `IA-Carruseles-Aesthetic.zip`, 147.576.571 bytes, 1.062 entradas: la skill `carrusel-aesthetic` del
+14 de octubre de 2026 (100 estilos), `gpt-image-2`, `image-privacy`, 15 vídeos de referencia y documentación de
+instalación y verificación. SHA-256 de la entrega del 14 de octubre de 2026:
 
-`4ced5ed70e30e4d5b067bd6671dc0b3e41a5bb4b8042a7137a89029d4f86528e`
+`e3a8e1eec970f1f382a350a72388c822608265b9ec19fdab7a0d2337a5e008a5`
 
-KV `DOWNLOADS` almacena cinco partes de hasta 20 MiB porque cada valor de KV tiene un límite
-de 25 MiB. El Worker las transmite por streaming como un único ZIP; no hay URL pública de KV.
-Los identificadores de las partes incluyen su hash y el manifiesto se cambia al terminar la subida.
+La entrega anterior (1 de octubre, 86.790.109 bytes, 71 estilos, `4ced5ed70e30e4d5b067bd6671dc0b3e41a5bb4b8042a7137a89029d4f86528e`)
+se conserva fuera del repositorio para poder volver a ella.
+
+KV `DOWNLOADS` almacena partes de hasta 20 MiB porque cada valor de KV tiene un límite de 25 MiB (la entrega del
+14 de octubre son 8). El Worker comprueba con `list()` que existen todas antes de responder y las transmite por
+streaming como un único ZIP, abriendo una parte cada vez: un Worker solo mantiene 6 conexiones simultáneas y, si
+espera con más pendientes, Cloudflare cancela la más antigua, lo que cortaría un ZIP de más de 6 partes. No hay URL
+pública de KV. Los identificadores de las partes incluyen su hash y el manifiesto se cambia al terminar la subida.
 La propagación de KV puede hacer que una actualización tarde en llegar a todas las ubicaciones.
 
 ```sh
@@ -77,9 +83,10 @@ node scripts/upload-download.mjs /ruta/IA-Carruseles-Aesthetic.zip --remote
 
 No colocar ZIP, claves ni exportaciones dentro de `carruseles/` o `fonts/`: son directorios públicos.
 La generación de `_site/` usa una lista explícita de entradas públicas y excluye los archivos de trabajo,
-dependencias, base local y código del servidor. El ZIP original se conserva fuera de este repositorio,
-en `/Users/danifcn/Daniel Feyto PB/media/lead-magnets/IA-Carruseles-Aesthetic-2026-10-01/IA-Carruseles-Aesthetic.zip`
-(antes en `mac-vault/output/`; la versión completa, en `IA-Carruseles-Aesthetic-Completa-2026-10-01/` de esa misma carpeta).
+dependencias, base local y código del servidor. El ZIP vigente se conserva fuera de este repositorio,
+en `/Users/danifcn/Daniel Feyto PB/media/lead-magnets/IA-Carruseles-Aesthetic-2026-10-14/IA-Carruseles-Aesthetic.zip`,
+con su carpeta sin comprimir y `VERIFICACION-ZIP.json`. Las entregas del 1 de octubre siguen en
+`IA-Carruseles-Aesthetic-2026-10-01/` e `IA-Carruseles-Aesthetic-Completa-2026-10-01/` de esa misma carpeta.
 
 ## Desarrollo y despliegue
 
