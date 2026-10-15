@@ -105,30 +105,22 @@ async function hasEveryPart(env, parts) {
   return parts.every(key => found.has(key));
 }
 
-// One KV connection at a time. A Worker may hold six open connections; with more pending and none being
-// read, the runtime cancels the oldest to break the deadlock, which would cut an archive of more than six parts.
-function joinParts(env, parts) {
-  let index = 0, reader = null;
-  return new ReadableStream({
-    async pull(controller) {
-      try {
-        while (index < parts.length) {
-          if (!reader) {
-            const stream = await env.DOWNLOADS.get(parts[index], 'stream');
-            if (!stream) throw new Error('Archive incomplete');
-            reader = stream.getReader();
-          }
-          const { done, value } = await reader.read();
-          if (!done) { controller.enqueue(value); return; }
-          reader.releaseLock();
-          reader = null;
-          index++;
-        }
-        controller.close();
-      } catch (error) { controller.error(error); }
-    },
-    async cancel(reason) { if (reader) await reader.cancel(reason); },
-  });
+// One part at a time, each piped straight into the response. A Worker holds at most six connections and, with
+// more pending and none being read, the runtime cancels the oldest: opening every part at once would cut an
+// archive of more than six. KV body to FixedLengthStream is system stream to system stream, so the runtime moves
+// the bytes without JavaScript; a read/enqueue loop in JS spent ~17 ms of CPU per MB and hit the CPU limit at
+// 53-115 MB of the 147,6 MB archive (exceededCpu, 14-oct-2026).
+async function pumpParts(env, parts, writable) {
+  try {
+    for (const key of parts) {
+      const part = await env.DOWNLOADS.get(key, 'stream');
+      if (!part) throw new Error('Archive incomplete');
+      await part.pipeTo(writable, { preventClose: true });
+    }
+    await writable.close();
+  } catch (error) {
+    await writable.abort(error).catch(() => {});
+  }
 }
 
 async function download(request, env) {
@@ -143,13 +135,10 @@ async function download(request, env) {
   if (request.method === 'HEAD') return new Response(null, { headers });
   // KV parts have no public URL. Only this authenticated route can read them.
   if (!await hasEveryPart(env, manifest.parts)) throw new Error('Archive incomplete');
-  let body = joinParts(env, manifest.parts);
-  if (typeof FixedLengthStream !== 'undefined') {
-    const fixed = new FixedLengthStream(manifest.size);
-    body.pipeTo(fixed.writable).catch(() => {}); // An aborted transfer already errors the readable side.
-    body = fixed.readable;
-  }
-  return new Response(body, { headers });
+  // FixedLengthStream exists only in Workers; tests under Node use a plain identity stream.
+  const { readable, writable } = typeof FixedLengthStream !== 'undefined' ? new FixedLengthStream(manifest.size) : new TransformStream();
+  pumpParts(env, manifest.parts, writable); // Not awaited: the response streams while the parts are piped in.
+  return new Response(readable, { headers });
 }
 
 export default {
